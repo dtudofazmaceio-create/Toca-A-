@@ -269,16 +269,17 @@ function pdfCards(){
  if(S.cfg.ig)smalls.push(['Instagram',qrImg(url(S.cfg.ig)),'qig']);
  if(S.cfg.gr)smalls.push(['Avalie no Google',qrImg(S.cfg.gr),'qgr']);
  const nome=doc.splitTextToSize(S.cfg.name||'DJ',37)[0];
- let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),k=Math.min(37/p.width,11.4/p.height);lg={w:p.width*k,h:p.height*k}}
+ let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),k=Math.min(32/p.width,10.5/p.height);lg={w:p.width*k,h:p.height*k}}
  const qa=tg?null:qrImg(link(),'L');
+ const ax=lg?4.5+lg.w+4:4.5,pw=W-4.5-ax,pc=ax+pw/2;
  let fs=13,pl=null;doc.setFont('helvetica','bold');
- if(ph){for(;fs>=8;fs-=.5){doc.setFontSize(fs);if(doc.getTextWidth(ph)<=76){pl=[ph];break}}
-  if(!pl)for(fs=11;fs>=6;fs-=.5){doc.setFontSize(fs);pl=doc.splitTextToSize(ph,76);if(pl.length<=2)break}}
+ if(ph){for(;fs>=8;fs-=.5){doc.setFontSize(fs);if(doc.getTextWidth(ph)<=pw){pl=[ph];break}}
+  if(!pl)for(fs=11;fs>=6;fs-=.5){doc.setFontSize(fs);pl=doc.splitTextToSize(ph,pw);if(pl.length<=2)break}}
  for(let i=1;i<=n;i++){
   const k=(i-1)%8;if(i>1&&k==0)doc.addPage();
   const x=ox+(k%2)*(W+gx),y=oy+Math.floor(k/2)*(H+gy);
   fill(BG);doc.roundedRect(x,y,W,H,3,3,'F');if(bgd)doc.addImage(bgd,'PNG',x,y,W,H,'bgc');doc.setDrawColor(...LN);doc.setLineWidth(.25);doc.roundedRect(x,y,W,H,3,3,'S');
-  if(lg){doc.addImage(S.cfg.logo,'PNG',x+44+(37-lg.w)/2,y+38.8+(11.4-lg.h)/2,lg.w,lg.h,'logo')}
+  if(lg){doc.addImage(S.cfg.logo,'PNG',x+4.5,y+3+(10.5-lg.h)/2,lg.w,lg.h,'logo')}
   else{ink(AM);doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.text(nome,x+62.5,y+46,{align:'center'})}
   fill(WH);doc.roundedRect(x+4.5,y+15.5,34,34,2.5,2.5,'F');
   doc.addImage(tg?qrImg(link(i),'L'):qa,'PNG',x+6.5,y+17.5,30,30,tg?undefined:'qmain');
@@ -286,8 +287,8 @@ function pdfCards(){
    fill(WH);doc.roundedRect(bx,y+15.5,17,17,2,2,'F');doc.addImage(q[1],'PNG',bx+1.5,y+17,14,14,q[2]);
    ink(TX);doc.setFont('helvetica','normal');doc.setFontSize(5.5);doc.text(q[0],bx+8.5,y+35.5,{align:'center'})});
   if(pl){const n2=Math.min(2,pl.length);ink(TX);doc.setFont('helvetica','bold');doc.setFontSize(fs);
-   doc.text(pl.slice(0,2),x+W/2,y+8.5-(n2-1)*fs*.423/2+fs*.12,{align:'center',lineHeightFactor:1.2});
-   fill(PK);doc.rect(x+W/2-6,y+13.4,12,0.6,'F')}
+   doc.text(pl.slice(0,2),x+pc,y+8.5-(n2-1)*fs*.423/2+fs*.12,{align:'center',lineHeightFactor:1.2});
+   fill(PK);doc.rect(x+pc-6,y+13.4,12,0.6,'F')}
  }
  doc.save('cartoes-mesas.pdf');toast('PDF pronto');
  },60)}
