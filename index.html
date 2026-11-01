@@ -9,7 +9,7 @@
 body{background:var(--bg);color:var(--t);font:15px/1.4 "Trebuchet MS",system-ui,sans-serif;min-height:100dvh;padding:env(safe-area-inset-top) 0 0}
 button,input,select{font:inherit;color:inherit}
 h1,h2,h3{font-family:Georgia,serif;font-weight:700}
-.btn{background:var(--a);border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;color:#fff}
+.btn{background:var(--a);border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;color:var(--ap)}
 .btn.g{background:var(--p2);border:1px solid var(--l)}
 .sm{background:var(--p2);border:1px solid var(--l);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:13px}
 .sm.ok{background:var(--ok);color:#06281a;border:0;font-weight:700}.sm.no{color:var(--no)}
@@ -22,7 +22,7 @@ nav{background:var(--p);padding:20px 12px;display:flex;flex-direction:column;gap
 #dot{width:10px;height:10px;border-radius:50%;background:var(--m);margin-left:auto}#dot.on{background:var(--ok)}#dot.off{background:var(--no)}
 nav a{display:flex;gap:10px;align-items:center;padding:11px 12px;border-radius:10px;cursor:pointer;color:var(--m)}
 nav a.on{background:var(--p2);color:var(--t)}
-nav em{margin-left:auto;background:var(--a);color:#fff;border-radius:99px;padding:0 8px;font-style:normal;font-size:12px}nav em:empty{display:none}
+nav em{margin-left:auto;background:var(--a);color:var(--ap);border-radius:99px;padding:0 8px;font-style:normal;font-size:12px}nav em:empty{display:none}
 main{padding:24px;overflow:auto}
 .tabs{display:none}
 .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start}
@@ -33,7 +33,7 @@ main{padding:24px;overflow:auto}
 .card.fresh{border-color:var(--a);box-shadow:0 0 0 1px var(--a)}
 .card h4{font-size:17px;font-family:Georgia,serif}.card p{color:var(--m);font-size:13px;margin-top:2px}
 .card .act{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.tag{display:inline-block;background:var(--b);color:#2b1a00;border-radius:6px;padding:0 7px;font-size:12px;font-weight:700;margin-left:6px}
+.tag{display:inline-block;background:var(--b);color:var(--ab);border-radius:6px;padding:0 7px;font-size:12px;font-weight:700;margin-left:6px}
 .empty{color:var(--m);padding:18px;text-align:center;border:1px dashed var(--l);border-radius:14px}
 .panel{background:var(--p);border:1px solid var(--l);border-radius:16px;padding:20px;margin-bottom:18px;max-width:720px}
 .qrs{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
@@ -41,16 +41,23 @@ main{padding:24px;overflow:auto}
 .note{background:var(--p2);border-left:4px solid var(--b);padding:10px 12px;border-radius:8px;margin-bottom:14px;font-size:13px}
 .row{display:flex;gap:8px}.row>*{flex:1}
 #print{display:none}
-#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--t);color:#1a0f2e;padding:10px 18px;border-radius:99px;font-weight:700;display:none;z-index:9}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--t);color:var(--bg);padding:10px 18px;border-radius:99px;font-weight:700;display:none;z-index:9}
 /* convidado */
-.g{max-width:480px;margin:0 auto;padding:22px 18px 40px}
+.gw{max-width:480px;margin:0 auto;padding:22px 18px 40px}
 .hero{text-align:center;padding:10px 0 20px}.hero h1{font-size:30px}.hero p{color:var(--m)}
 .hero .ev{color:var(--b);font-weight:700;margin-bottom:6px}
 .gs{display:flex;gap:12px;align-items:center}.gs .qb{padding:6px}
-.st{font-size:12px;border-radius:99px;padding:2px 10px;background:var(--p2);white-space:nowrap}.st.queue{background:var(--b);color:#2b1a00}.st.played{background:var(--ok);color:#06281a}.st.rejected{color:var(--no)}
+.st{font-size:12px;border-radius:99px;padding:2px 10px;background:var(--p2);white-space:nowrap}.st.queue{background:var(--b);color:var(--ab)}.st.played{background:var(--ok);color:#06281a}.st.rejected{color:var(--no)}
 .li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--l)}
 .btn.w{width:100%;padding:14px;font-size:16px}
 a.btn{display:inline-block;text-decoration:none;text-align:center}
+.chip{background:#fff;border-radius:8px;padding:3px 6px;display:inline-flex}.chip img{height:24px;max-width:90px;object-fit:contain}
+#bgl{position:fixed;inset:0;z-index:-1}
+.lg{display:block;margin:0 auto 12px;max-height:84px;max-width:70%;object-fit:contain;background:#fff;padding:8px 12px;border-radius:14px}
+.ths{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:6px 0 16px}
+.th{border:2px solid;border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:6px;align-items:center;font-family:inherit}.th.on{box-shadow:0 0 0 3px var(--t)}
+.sw{width:16px;height:16px;border-radius:50%;display:inline-block}
+.up{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.up input{flex:1;min-width:180px;margin:4px 0 12px}.up .chip img{height:44px;max-width:140px}.bgp{height:44px;border-radius:8px}
 @media(max-width:860px){
  .shell{grid-template-columns:1fr;padding-bottom:70px}
  nav{position:fixed;bottom:0;left:0;right:0;flex-direction:row;justify-content:space-around;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-right:0;border-top:1px solid var(--l);z-index:5}
@@ -58,14 +65,15 @@ a.btn{display:inline-block;text-decoration:none;text-align:center}
  nav em{position:absolute;top:0;right:8px;margin:0}
  main{padding:16px}
  .tabs{display:flex;gap:6px;margin-bottom:14px}.tabs button{flex:1;background:var(--p);border:1px solid var(--l);border-radius:10px;padding:9px 4px;cursor:pointer}
- .tabs button.on{background:var(--a);border-color:var(--a)}
+ .tabs button.on{background:var(--a);border-color:var(--a);color:var(--ap)}
  .cols{display:block}.cols section{display:none}.cols section.on{display:block}
 }
 @media print{body>*{display:none!important}#print{display:grid!important;grid-template-columns:1fr 1fr;gap:12px;background:#fff;color:#000}
  #print div{border:2px solid #000;border-radius:14px;padding:16px;text-align:center;page-break-inside:avoid}#print h2{font-size:26px}#print .qb{padding:0}}
 </style></head><body>
-<div id="app"></div><div id="print"></div><div id="toast"></div>
+<div id="bgl"></div><div id="app"></div><div id="print"></div><div id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -86,6 +94,22 @@ const url=s=>!s?'':/^https?:/i.test(s)?s:'https://instagram.com/'+s.replace(/^@/
 const ago=ts=>{const m=Math.round((Date.now()-ts)/6e4);return m<1?'agora':m<60?m+' min':Math.floor(m/60)+'h'};
 const LB={new:'Enviado',queue:'Na fila 🎧',played:'Tocou! 🎉',rejected:'Não rolou'};
 
+/* ---------- Temas ---------- */
+const TH={neon:{n:'Noite neon',bg:'#160d28',p:'#221541',p2:'#2e1d56',l:'#3d2a6e',t:'#f6f1ff',m:'#a597c9',a:'#ff4d8d',b:'#ffb938'},
+ azul:{n:'Pista azul',bg:'#0b1426',p:'#12203a',p2:'#1a2d50',l:'#2a4272',t:'#eaf2ff',m:'#8fa6c9',a:'#2ec5ff',b:'#ffd166'},
+ sol:{n:'Pôr do sol',bg:'#1f0f12',p:'#2e1619',p2:'#40201f',l:'#5e332d',t:'#fff1ea',m:'#c9a198',a:'#ff7a3d',b:'#ffcf5c'},
+ claro:{n:'Dia claro',bg:'#eef1f7',p:'#ffffff',p2:'#e4e9f3',l:'#cfd6e6',t:'#161a2b',m:'#5b6586',a:'#5b3df5',b:'#e8590c',ok:'#17a569',no:'#d63838'}};
+const h2r=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const lum=h=>{const[r,g,b]=h2r(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
+const on=h=>lum(h)>.3?'#14101f':'#ffffff';
+const rgba=(h,a)=>`rgba(${h2r(h).join(',')},${a})`;
+function applyTheme(c){const T=TH[c.theme]||TH.neon,r=document.documentElement.style,a=c.pc||T.a;
+ const V={bg:T.bg,p:T.p,p2:T.p2,l:T.l,t:T.t,m:T.m,a,b:T.b,ok:T.ok||'#3ddc97',no:T.no||'#ff6b6b',ap:on(a),ab:on(T.b)};
+ for(const k in V)r.setProperty('--'+k,V[k]);
+ $('meta[name=theme-color]').content=T.bg;
+ $('#bgl').style.background=c.bg?`linear-gradient(${rgba(T.bg,.82)},${rgba(T.bg,.92)}),url(${c.bg}) center/cover`:''}
+function readImg(f,max,type,q){return new Promise((ok,er)=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);const x=c.getContext('2d');if(type=='image/jpeg'){x.fillStyle='#000';x.fillRect(0,0,c.width,c.height)}x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL(type,q))};im.onerror=()=>er(Error('img'));im.src=u})}
+
 /* ================= DJ ================= */
 const S={cfg:{},reqs:[],sec:'req',tab:'new',fresh:new Set()};
 const L=()=>S.reqs.filter(r=>!r.del);
@@ -94,11 +118,11 @@ const COLS={new:'Novos',queue:'Na fila',done:'Finalizados'};
 const key=r=>(r.song+r.artist).toLowerCase().replace(/\s+/g,' ').trim();
 const link=m=>location.href.split('#')[0]+'#g='+b64e({i:G.id,t:G.tok})+(m?'&m='+m:'');
 
-function djApp(){
- $('#app').innerHTML=`<div class="shell"><nav><div class="brand">🎧 <b>${esc(S.cfg.name||'Pedidos do DJ')}</b><i id="dot"></i></div>
+function djApp(){applyTheme(S.cfg);
+ $('#app').innerHTML=`<div class="shell"><nav><div class="brand"><span id="bl"></span><b>${esc(S.cfg.name||'Pedidos do DJ')}</b><i id="dot"></i></div>
  <a data-s="req">🎵<span>Pedidos</span><em id="bd"></em></a><a data-s="qr">▦<span>QR Codes</span></a><a data-s="cfg">⚙️<span>Ajustes</span></a></nav><main id="main"></main></div>`;
  $$('nav a').forEach(a=>a.onclick=()=>go(a.dataset.s));
- $('#main').onclick=onAct;
+ $('#main').onclick=onAct;$('#main').onchange=onChg;setBrand();
  go(S.cfg.tok&&S.cfg.gid?'req':'cfg');
  setInterval(sync,5000);sync();
 }
@@ -126,7 +150,7 @@ function onAct(e){const t=e.target.closest('button');if(!t)return;
  const a=t.dataset.a;if(!a)return;
  if(a=='clr'){L().filter(r=>colOf(r)=='done').forEach(r=>mark(r,'del'))}
  else if(a=='notif'){Notification.requestPermission().then(()=>{beep();toast('Alertas ativados')})}
- else if(a=='save')saveCfg();else if(a=='mk')mkGist();else if(a=='print')printCards();
+ else if(a=='th'){readForm();S.cfg.theme=t.dataset.v;S.cfg.pc='';changed()}else if(a=='rpc'){readForm();S.cfg.pc='';changed()}else if(a=='rlogo'){readForm();S.cfg.logo='';changed()}else if(a=='rbg'){readForm();S.cfg.bg='';changed()}else if(a=='save')saveCfg();else if(a=='mk')mkGist();else if(a=='pdf')pdfCards();
  else if(a=='copy'){navigator.clipboard.writeText(link()).then(()=>toast('Link copiado'))}
  else{const r=S.reqs.find(x=>x.id==t.dataset.id);if(r)mark(r,a)}
  viewReq()}
@@ -137,14 +161,46 @@ function viewQr(){
  $('#main').innerHTML=`<div class="panel"><h2>QR Code para os convidados</h2><br>
  ${https?'':'<div class="note">Esta página não está online. Hospede o arquivo (ex.: GitHub Pages) e abra por lá para gerar QR Codes que funcionam nos celulares.</div>'}
  ${G.id?`<div class="qrs"><div class="qb" id="q0"></div><div><p style="color:var(--m);max-width:340px;word-break:break-all;font-size:12px">${esc(link()).slice(0,70)}…</p><br><button class="btn g" data-a="copy">Copiar link</button></div></div>`:'<p class="empty">Configure o Gist em Ajustes primeiro.</p>'}</div>
- <div class="panel"><h2>Cartões das mesas</h2><p style="color:var(--m)">Um QR por mesa, já com o número da mesa no pedido.</p><br>
- <label>Quantidade de mesas</label><input id="nt" type="number" min="1" max="200" value="${S.cfg.tables||10}"><button class="btn" data-a="print">Imprimir cartões</button></div>
+ <div class="panel"><h2>Cartões das mesas</h2><p style="color:var(--m)">PDF no tamanho de cartão de crédito (85,6 × 54 mm), 8 por folha A4. Cada cartão traz o QR de pedidos da mesa, Instagram e avaliação do Google.</p><br>
+ <label>Quantidade de mesas</label><input id="nt" type="number" min="1" max="200" value="${S.cfg.tables||10}"><button class="btn" data-a="pdf">Baixar PDF dos cartões</button></div>
  <div class="panel"><h2>Seus QR Codes</h2><br><div class="qrs">${S.cfg.ig?'<div><div class="qb" id="qi"></div><p>Instagram</p></div>':''}${S.cfg.gr?'<div><div class="qb" id="qg"></div><p>Avaliação Google</p></div>':''}${!S.cfg.ig&&!S.cfg.gr?'<p class="empty">Informe os links em Ajustes.</p>':''}</div></div>`;
  if(G.id)qr($('#q0'),link(),200);if(S.cfg.ig)qr($('#qi'),url(S.cfg.ig),140);if(S.cfg.gr)qr($('#qg'),S.cfg.gr,140);
 }
-function printCards(){const n=Math.min(200,+$('#nt').value||10);S.cfg.tables=n;kv.set('cfg',S.cfg);const P=$('#print');P.innerHTML='';
- for(let i=1;i<=n;i++){const d=document.createElement('div');d.innerHTML=`<h2>Mesa ${i}</h2><p>Peça sua música 🎶</p><br><div class="qb" style="margin:auto"></div><br><b>${esc(S.cfg.name||'')}</b>`;P.append(d);qr($('.qb',d),link(i),150)}
- setTimeout(()=>window.print(),500)}
+function qrImg(text,lvl='M'){const d=document.createElement('div');new QRCode(d,{text,width:600,height:600,correctLevel:QRCode.CorrectLevel[lvl]});return d.querySelector('canvas').toDataURL('image/png')}
+function pdfCards(){
+ if(!G.id||!G.tok)return toast('Configure o Gist em Ajustes primeiro');
+ if(!window.jspdf)return toast('Biblioteca de PDF não carregou. Verifique a internet.');
+ const n=Math.min(200,Math.max(1,+$('#nt').value||10));S.cfg.tables=n;kv.set('cfg',S.cfg);toast('Gerando PDF…');
+ setTimeout(()=>{
+ const T=TH[S.cfg.theme]||TH.neon,pk=S.cfg.pc||T.a;
+ const doc=new jspdf.jsPDF({unit:'mm',format:'a4'}),W=85.6,H=54,gx=6,gy=6,ox=(210-2*W-gx)/2,oy=(297-4*H-3*gy)/2;
+ const BG=h2r(T.bg),LN=h2r(T.l),TX=h2r(T.t),MU=h2r(T.m),PK=h2r(pk),AM=h2r(T.b),PT=h2r(on(pk)),WH=[255,255,255];
+ const fill=c=>doc.setFillColor(...c),ink=c=>doc.setTextColor(...c);
+ const smalls=[];
+ if(S.cfg.ig)smalls.push(['Instagram',qrImg(url(S.cfg.ig)),'qig']);
+ if(S.cfg.gr)smalls.push(['Avalie no Google',qrImg(S.cfg.gr),'qgr']);
+ const nome=doc.splitTextToSize(S.cfg.name||'DJ',50)[0];
+ let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),k=Math.min(24/p.width,7/p.height);lg={w:p.width*k,h:p.height*k}}
+ for(let i=1;i<=n;i++){
+  const k=(i-1)%8;if(i>1&&k==0)doc.addPage();
+  const x=ox+(k%2)*(W+gx),y=oy+Math.floor(k/2)*(H+gy);
+  fill(BG);doc.setDrawColor(...LN);doc.setLineWidth(.25);doc.roundedRect(x,y,W,H,3,3,'FD');
+  if(lg){fill(WH);doc.roundedRect(x+4.5,y+3,lg.w+3,9,2,2,'F');doc.addImage(S.cfg.logo,'PNG',x+6,y+4+(7-lg.h)/2,lg.w,lg.h,'logo')}
+  else{ink(AM);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text(nome,x+4.5,y+8.6)}
+  fill(PK);doc.roundedRect(x+W-26.5,y+4,22,7,3.5,3.5,'F');
+  ink(PT);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('Mesa '+i,x+W-15.5,y+8.8,{align:'center'});
+  fill(WH);doc.roundedRect(x+4.5,y+15.5,34,34,2.5,2.5,'F');
+  doc.addImage(qrImg(link(i),'L'),'PNG',x+6.5,y+17.5,30,30);
+  smalls.forEach((q,j)=>{const bx=x+44+j*19.5;
+   fill(WH);doc.roundedRect(bx,y+15.5,17,17,2,2,'F');doc.addImage(q[1],'PNG',bx+1.5,y+17,14,14,q[2]);
+   ink(TX);doc.setFont('helvetica','normal');doc.setFontSize(5.5);doc.text(q[0],bx+8.5,y+35.5,{align:'center'})});
+  fill(AM);doc.rect(x+44,y+38.4,10,0.6,'F');
+  ink(TX);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('Peça sua música',x+44,y+43);
+  ink(MU);doc.setFont('helvetica','normal');doc.setFontSize(6.5);
+  doc.text('Aponte a câmera e escolha',x+44,y+46.6);doc.text('a próxima faixa.',x+44,y+49.6);
+ }
+ doc.save('cartoes-mesas.pdf');toast('PDF pronto ✔');
+ },60)}
 
 function viewCfg(){const c=S.cfg;
  $('#main').innerHTML=`<div class="panel"><h2>Sincronização (GitHub Gist)</h2><br>
@@ -158,14 +214,27 @@ function viewCfg(){const c=S.cfg;
  <label>Instagram (@usuario ou link)</label><input id="f-ig" value="${esc(c.ig)}">
  <label>Link de avaliação do Google</label><input id="f-gr" value="${esc(c.gr)}" placeholder="https://g.page/r/.../review">
  <label>Pedidos</label><select id="f-open"><option value="1" ${c.open!==false?'selected':''}>Abertos</option><option value="0" ${c.open===false?'selected':''}>Fechados</option></select>
- <div class="row"><button class="btn" data-a="save">Salvar e sincronizar</button><button class="btn g" data-a="notif">Ativar alertas</button></div></div>`}
+ <div class="row"><button class="btn" data-a="save">Salvar e sincronizar</button><button class="btn g" data-a="notif">Ativar alertas</button></div></div>
+ <div class="panel"><h2>Aparência</h2><br><label>Tema (vale para o painel, a tela do convidado e os cartões)</label>
+ <div class="ths">${Object.entries(TH).map(([k,T])=>`<button class="th ${(c.theme||'neon')==k?'on':''}" data-a="th" data-v="${k}" style="background:${T.bg};color:${T.t};border-color:${T.a}"><span class="sw" style="background:${T.a}"></span><span class="sw" style="background:${T.b}"></span><b>${T.n}</b></button>`).join('')}</div>
+ <label>Cor principal (opcional)</label><div class="row"><input id="f-pc" type="color" value="${c.pc||(TH[c.theme]||TH.neon).a}" style="height:44px;padding:4px"><button class="btn g" data-a="rpc" style="flex:0 0 auto;margin:4px 0 12px">Restaurar</button></div>
+ <label>Logomarca (aparece no app e nos cartões em PDF)</label><div class="up">${c.logo?`<span class="chip"><img src="${c.logo}" alt=""></span><button class="sm no" data-a="rlogo">Remover</button>`:''}<input id="f-logo" type="file" accept="image/*"></div>
+ <label>Plano de fundo (imagem)</label><div class="up">${c.bg?`<img class="bgp" src="${c.bg}" alt=""><button class="sm no" data-a="rbg">Remover</button>`:''}<input id="f-bg" type="file" accept="image/*"></div></div>`}
 async function mkGist(){G.tok=$('#f-tok').value.trim();if(!G.tok)return toast('Informe o token');
  try{const r=await gh('POST','/gists',{description:'Pedidos do DJ',public:false,files:{'config.json':{content:'{}'}}});$('#f-gid').value=r.j.id;toast('Gist criado — salve')}catch(e){toast('Erro '+e.message+' (token válido?)')}}
-async function saveCfg(){const v=i=>$('#f-'+i).value.trim();
- S.cfg={...S.cfg,tok:v('tok'),gid:v('gid'),name:v('name'),ev:v('ev'),tag:v('tag'),ig:v('ig'),gr:v('gr'),open:v('open')=='1'};
- G.tok=S.cfg.tok;G.id=S.cfg.gid;G.et='';await kv.set('cfg',S.cfg);
- if(!G.id||!G.tok)return toast('Informe token e Gist');
- try{const c=S.cfg;await gh('PATCH','/gists/'+G.id,{files:{'config.json':{content:JSON.stringify({name:c.name,ev:c.ev,tag:c.tag,ig:url(c.ig),gr:c.gr,open:c.open})}}});toast('Salvo e sincronizado ✔');$('.brand b').textContent=c.name||'Pedidos do DJ';sync()}catch(e){toast('Falha ao sincronizar ('+e.message+')')}}
+function setBrand(){const b=$('#bl');if(b)b.innerHTML=S.cfg.logo?`<span class="chip"><img src="${S.cfg.logo}" alt=""></span>`:'🎧';const n=$('.brand b');if(n)n.textContent=S.cfg.name||'Pedidos do DJ'}
+function readForm(){const v=i=>{const e=$('#f-'+i);return e?e.value.trim():undefined};
+ const o={tok:v('tok'),gid:v('gid'),name:v('name'),ev:v('ev'),tag:v('tag'),ig:v('ig'),gr:v('gr')},op=v('open');if(op!==undefined)o.open=op=='1';
+ for(const k in o)if(o[k]!==undefined)S.cfg[k]=o[k];G.tok=S.cfg.tok||'';G.id=S.cfg.gid||''}
+const pushCfg=()=>{const c=S.cfg;return gh('PATCH','/gists/'+G.id,{files:{'config.json':{content:JSON.stringify({name:c.name,ev:c.ev,tag:c.tag,ig:url(c.ig),gr:c.gr,open:c.open,theme:c.theme,pc:c.pc,logo:c.logo,bg:c.bg})}}})};
+async function saveCfg(){readForm();G.et='';await kv.set('cfg',S.cfg);if(!G.id||!G.tok)return toast('Informe token e Gist');
+ try{await pushCfg();toast('Salvo e sincronizado ✔');setBrand();sync()}catch(e){toast('Falha ao sincronizar ('+e.message+')')}}
+function changed(){kv.set('cfg',S.cfg);applyTheme(S.cfg);setBrand();if(S.sec=='cfg')viewCfg();
+ if(G.id&&G.tok)pushCfg().then(()=>toast('Aparência publicada ✔')).catch(()=>toast('Salva neste aparelho; falha ao publicar'))}
+async function onChg(e){const i=e.target;try{
+ if(i.id=='f-pc'){readForm();S.cfg.pc=i.value;return changed()}
+ if(i.id=='f-logo'&&i.files[0]){readForm();S.cfg.logo=await readImg(i.files[0],300,'image/png');return changed()}
+ if(i.id=='f-bg'&&i.files[0]){readForm();S.cfg.bg=await readImg(i.files[0],1100,'image/jpeg',.6);return changed()}}catch{toast('Não foi possível ler a imagem')}}
 
 let busy=0;
 async function sync(){if(!G.id||!G.tok||busy)return;busy=1;const dot=$('#dot');
@@ -192,9 +261,9 @@ function alertNew(a){beep();navigator.vibrate&&navigator.vibrate([200,100,200]);
 async function guestApp(P){
  const o=b64d(P.get('g'));G.tok=o.t;G.id=o.i;const mesa=P.get('m')||'';
  let cfg=(await kv.get('gcfg'))||{},mine=(await kv.get('mine'))||[],last='';
- function draw(){const sig=JSON.stringify([cfg,mine]);if(sig==last)return;last=sig;
+ function draw(){const sig=JSON.stringify([cfg,mine]);if(sig==last)return;last=sig;applyTheme(cfg);
   const open=cfg.open!==false,vals=$$('input').map(i=>i.value);
-  $('#app').innerHTML=`<div class="g"><div class="hero">${cfg.ev?`<div class="ev">${esc(cfg.ev)}</div>`:''}<h1>${esc(cfg.name||'DJ')}</h1><p>${esc(cfg.tag||'Peça sua música favorita!')}</p></div>
+  $('#app').innerHTML=`<div class="gw"><div class="hero">${cfg.logo?`<img class="lg" src="${cfg.logo}" alt="">`:''}${cfg.ev?`<div class="ev">${esc(cfg.ev)}</div>`:''}<h1>${esc(cfg.name||'DJ')}</h1><p>${esc(cfg.tag||'Peça sua música favorita!')}</p></div>
   <div class="panel" style="max-width:none">${open?`<h3>Qual música você quer ouvir?</h3><br><label>Música *</label><input id="s" maxlength="80" autocomplete="off"><label>Artista</label><input id="a" maxlength="60" autocomplete="off">
   <label>Seu nome</label><input id="n" maxlength="30" autocomplete="off">${mesa?`<p style="margin-bottom:12px">📍 Mesa ${esc(mesa)}</p>`:'<label>Mesa (opcional)</label><input id="m" maxlength="6">'}
   <button class="btn w" id="send">Enviar pedido</button>`:'<h3>Os pedidos estão fechados no momento.</h3><p style="color:var(--m)">Volte em breve!</p>'}</div>
@@ -224,6 +293,6 @@ async function guestApp(P){
 
 /* ================= Boot ================= */
 (async()=>{const P=new URLSearchParams(location.hash.slice(1));
- if(P.get('g')){try{return await guestApp(P)}catch{return $('#app').innerHTML='<div class="g"><p class="empty">Link inválido. Peça um novo QR Code ao DJ.</p></div>'}}
+ if(P.get('g')){try{return await guestApp(P)}catch{return $('#app').innerHTML='<div class="gw"><p class="empty">Link inválido. Peça um novo QR Code ao DJ.</p></div>'}}
  S.cfg=(await kv.get('cfg'))||{};G.tok=S.cfg.tok||'';G.id=S.cfg.gid||'';S.reqs=await R.all();djApp()})();
 </script></body></html>
