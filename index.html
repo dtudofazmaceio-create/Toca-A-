@@ -2,13 +2,15 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#1a0f2e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap">
 <title>Pedidos do DJ</title>
 <style>
 :root{--bg:#160d28;--p:#221541;--p2:#2e1d56;--l:#3d2a6e;--t:#f6f1ff;--m:#a597c9;--a:#ff4d8d;--b:#ffb938;--ok:#3ddc97;--no:#ff6b6b}
 *{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--t);font:15px/1.4 "Trebuchet MS",system-ui,sans-serif;min-height:100dvh;padding:env(safe-area-inset-top) 0 0}
+body{background:var(--bg);color:var(--t);font:15px/1.45 "Plus Jakarta Sans",system-ui,sans-serif;min-height:100dvh;padding:env(safe-area-inset-top) 0 0}
 button,input,select{font:inherit;color:inherit}
-h1,h2,h3{font-family:Georgia,serif;font-weight:700}
+h1,h2,h3{font-weight:800;letter-spacing:-.01em}
 .btn{background:var(--a);border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;color:var(--ap)}
 .btn.g{background:var(--p2);border:1px solid var(--l)}
 .sm{background:var(--p2);border:1px solid var(--l);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:13px}
@@ -18,7 +20,7 @@ input:focus,button:focus-visible{outline:2px solid var(--b);outline-offset:1px}
 label{font-size:13px;color:var(--m)}
 .shell{display:grid;grid-template-columns:220px 1fr;min-height:100dvh}
 nav{background:var(--p);padding:20px 12px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--l)}
-.brand{display:flex;gap:8px;align-items:center;margin-bottom:18px;font-family:Georgia,serif;font-size:17px}
+.brand{display:flex;gap:8px;align-items:center;margin-bottom:18px;font-size:17px}
 #dot{width:10px;height:10px;border-radius:50%;background:var(--m);margin-left:auto}#dot.on{background:var(--ok)}#dot.off{background:var(--no)}
 nav a{display:flex;gap:10px;align-items:center;padding:11px 12px;border-radius:10px;cursor:pointer;color:var(--m)}
 nav a.on{background:var(--p2);color:var(--t)}
@@ -31,7 +33,7 @@ main{padding:24px;overflow:auto}
 .cols h3 .sm{margin-left:auto}
 .card{background:var(--p);border:1px solid var(--l);border-radius:14px;padding:14px;margin-bottom:12px}
 .card.fresh{border-color:var(--a);box-shadow:0 0 0 1px var(--a)}
-.card h4{font-size:17px;font-family:Georgia,serif}.card p{color:var(--m);font-size:13px;margin-top:2px}
+.card h4{font-size:17px}.card p{color:var(--m);font-size:13px;margin-top:2px}
 .card .act{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .tag{display:inline-block;background:var(--b);color:var(--ab);border-radius:6px;padding:0 7px;font-size:12px;font-weight:700;margin-left:6px}
 .empty{color:var(--m);padding:18px;text-align:center;border:1px dashed var(--l);border-radius:14px}
@@ -52,6 +54,36 @@ main{padding:24px;overflow:auto}
 .btn.w{width:100%;padding:14px;font-size:16px}
 a.btn{display:inline-block;text-decoration:none;text-align:center}
 .chip{background:#fff;border-radius:8px;padding:3px 6px;display:inline-flex}.chip img{height:24px;max-width:90px;object-fit:contain}
+.ic{flex:none;vertical-align:middle}
+.btn,a.btn{display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.sm{display:inline-flex;gap:5px;align-items:center}
+.btn:active,.sm:active,.ib:active{transform:scale(.97)}
+.panel h2,.panel h3{display:flex;gap:8px;align-items:center}
+.card{border-radius:16px;box-shadow:0 10px 24px -14px rgba(0,0,0,.55)}
+.card .ct{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.card .ar{font-size:14px;color:var(--t);opacity:.8;margin:2px 0 8px}
+.meta{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--m)}.meta span{display:inline-flex;gap:4px;align-items:center}
+.tag.nx{background:var(--a);color:var(--ap)}
+.card.s-new{border-left:4px solid var(--a)}.card.s-queue{border-left:4px solid var(--b)}.card.s-played{border-left:4px solid var(--ok)}.card.s-rejected{border-left:4px solid var(--no)}
+.top{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.srch{position:relative;flex:1;min-width:200px}.srch svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--m)}.srch input{margin:0;padding-left:38px}
+.ib{background:var(--p);border:1px solid var(--l);border-radius:10px;height:44px;padding:0 14px;cursor:pointer;display:inline-flex;gap:7px;align-items:center;font-weight:700}
+.ib.on{background:var(--a);color:var(--ap);border-color:var(--a)}.ib.off{color:var(--no);border-color:var(--no)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.stat{background:var(--p);border:1px solid var(--l);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center}
+.stat b{font-size:22px;line-height:1}.stat small{display:block;color:var(--m);font-size:12px;margin-top:2px}.stat .ic{color:var(--a)}
+.live{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block;animation:pl 2s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 var(--ok)}70%,100%{box-shadow:0 0 0 7px transparent}}
+.badge{display:inline-flex;gap:8px;align-items:center;background:var(--p);border:1px solid var(--l);border-radius:99px;padding:5px 14px;font-size:13px;font-weight:700}
+.fld div{position:relative}.fld svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--m);pointer-events:none;margin-top:-4px}.fld input{padding-left:38px}
+.pill{display:inline-flex;gap:6px;align-items:center;background:var(--p2);border-radius:99px;padding:6px 14px;margin-bottom:14px;font-weight:700}
+.st{display:inline-flex;gap:4px;align-items:center}
+.sk{background:linear-gradient(90deg,var(--p) 25%,var(--p2) 50%,var(--p) 75%);background-size:200% 100%;animation:sh 1.2s infinite;border-radius:10px}@keyframes sh{to{background-position:-200% 0}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}.hero{animation:rise .5s both}
+#toast{gap:8px;align-items:center}
+.empty .ic{opacity:.6;margin-bottom:6px}
+@media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 #bgl{position:fixed;inset:0;z-index:-1}
 .lg{display:block;margin:0 auto 12px;max-height:84px;max-width:70%;object-fit:contain;background:#fff;padding:8px 12px;border-radius:14px}
 .ths{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:6px 0 16px}
@@ -88,12 +120,46 @@ const b64d=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').repl
 const G={tok:'',id:'',et:''};
 async function gh(m,p,b,et){const r=await fetch('https://api.github.com'+p,{method:m,headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+G.tok,...(b?{'Content-Type':'application/json'}:{}),...(et?{'If-None-Match':et}:{})},body:b?JSON.stringify(b):undefined});
  if(r.status==304)return{nm:1};if(!r.ok)throw Error(r.status);return{j:await r.json(),et:r.headers.get('ETag')}}
-function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2600)}
+function toast(t){const e=$('#toast'),bad=/falha|erro|não |informe|aguarde|configure|digite/i.test(t);e.innerHTML=ic(bad?'x':'okc',16)+'<span>'+esc(t)+'</span>';e.style.display='flex';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2600)}
 function qr(el,text,n=140){el.innerHTML='';new QRCode(el,{text,width:n,height:n,correctLevel:QRCode.CorrectLevel.M})}
 const url=s=>!s?'':/^https?:/i.test(s)?s:'https://instagram.com/'+s.replace(/^@/,'');
 const ago=ts=>{const m=Math.round((Date.now()-ts)/6e4);return m<1?'agora':m<60?m+' min':Math.floor(m/60)+'h'};
-const LB={new:'Enviado',queue:'Na fila 🎧',played:'Tocou! 🎉',rejected:'Não rolou'};
+const LB={new:'Enviado',queue:'Na fila',played:'Tocou!',rejected:'Não rolou'};
 
+/* ---------- Ícones (SVG vetorial) ---------- */
+const IC={
+music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+qr:'<rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/>',
+sliders:'<line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>',
+headphones:'<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',
+check:'<path d="M20 6 9 17l-5-5"/>',
+okc:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>',
+x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+play:'<polygon points="6 3 20 12 6 21 6 3"/>',
+undo:'<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+trash:'<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>',
+search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+ig:'<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>',
+star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+vol:'<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
+volx:'<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/>',
+send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+copy:'<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+palette:'<circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.7-.8 1.7-1.7 0-.4-.2-.8-.5-1.1-.3-.3-.4-.7-.4-1.1 0-.9.8-1.7 1.7-1.7H16c3.3 0 6-2.7 6-6 0-4.9-4.5-9-10-9z"/>',
+cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+lock:'<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+unlock:'<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>',
+list:'<path d="M21 15V6"/><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M12 12H3"/><path d="M16 6H3"/><path d="M12 18H3"/>',
+inbox:'<polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+file:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/>',
+mic:'<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/>'};
+const ic=(n,z=18)=>`<svg class="ic" width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
+const safeU=u=>/^https?:\/\//i.test(u||'')?u:'',safeI=u=>/^data:image\/(png|jpeg|webp|gif);base64,/.test(u||'')?u:'';
 /* ---------- Temas ---------- */
 const TH={neon:{n:'Noite neon',bg:'#160d28',p:'#221541',p2:'#2e1d56',l:'#3d2a6e',t:'#f6f1ff',m:'#a597c9',a:'#ff4d8d',b:'#ffb938'},
  azul:{n:'Pista azul',bg:'#0b1426',p:'#12203a',p2:'#1a2d50',l:'#2a4272',t:'#eaf2ff',m:'#8fa6c9',a:'#2ec5ff',b:'#ffd166'},
@@ -103,6 +169,7 @@ const h2r=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
 const lum=h=>{const[r,g,b]=h2r(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
 const on=h=>lum(h)>.3?'#14101f':'#ffffff';
 const rgba=(h,a)=>`rgba(${h2r(h).join(',')},${a})`;
+const clean=c=>({...c,ig:safeU(c.ig),gr:safeU(c.gr),logo:safeI(c.logo),bg:safeI(c.bg),theme:TH[c.theme]?c.theme:'neon',pc:/^#[0-9a-f]{6}$/i.test(c.pc||'')?c.pc:''});
 function applyTheme(c){const T=TH[c.theme]||TH.neon,r=document.documentElement.style,a=c.pc||T.a;
  const V={bg:T.bg,p:T.p,p2:T.p2,l:T.l,t:T.t,m:T.m,a,b:T.b,ok:T.ok||'#3ddc97',no:T.no||'#ff6b6b',ap:on(a),ab:on(T.b)};
  for(const k in V)r.setProperty('--'+k,V[k]);
@@ -120,7 +187,7 @@ const link=m=>location.href.split('#')[0]+'#g='+b64e({i:G.id,t:G.tok})+(m?'&m='+
 
 function djApp(){applyTheme(S.cfg);
  $('#app').innerHTML=`<div class="shell"><nav><div class="brand"><span id="bl"></span><b>${esc(S.cfg.name||'Pedidos do DJ')}</b><i id="dot"></i></div>
- <a data-s="req">🎵<span>Pedidos</span><em id="bd"></em></a><a data-s="qr">▦<span>QR Codes</span></a><a data-s="cfg">⚙️<span>Ajustes</span></a></nav><main id="main"></main></div>`;
+ <a data-s="req">${ic('headphones',20)}<span>Pedidos</span><em id="bd"></em></a><a data-s="qr">${ic('qr',20)}<span>QR Codes</span></a><a data-s="cfg">${ic('sliders',20)}<span>Ajustes</span></a></nav><main id="main"></main></div>`;
  $$('nav a').forEach(a=>a.onclick=()=>go(a.dataset.s));
  $('#main').onclick=onAct;$('#main').onchange=onChg;setBrand();
  go(S.cfg.tok&&S.cfg.gid?'req':'cfg');
@@ -128,29 +195,41 @@ function djApp(){applyTheme(S.cfg);
 }
 function go(s){S.sec=s;$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.s==s));({req:viewReq,qr:viewQr,cfg:viewCfg})[s]()}
 
-function card(r,cnt){const c=colOf(r),n=cnt[key(r)];
- const b=c=='new'?`<button class="sm ok" data-a="queue" data-id="${r.id}">Na fila</button><button class="sm" data-a="played" data-id="${r.id}">Tocou</button><button class="sm no" data-a="rejected" data-id="${r.id}">Recusar</button>`
- :c=='queue'?`<button class="sm ok" data-a="played" data-id="${r.id}">Tocou</button><button class="sm" data-a="new" data-id="${r.id}">Voltar</button><button class="sm no" data-a="rejected" data-id="${r.id}">Recusar</button>`
- :`<button class="sm" data-a="new" data-id="${r.id}">Reabrir</button><button class="sm no" data-a="del" data-id="${r.id}">Apagar</button>`;
- return `<div class="card ${S.fresh.has(r.id)?'fresh':''}"><h4>${esc(r.song)}${n>1&&c!='done'?`<span class="tag">×${n}</span>`:''}</h4>
- <p>${esc(r.artist||'—')}</p><p>${esc(r.name||'Anônimo')}${r.table?' · Mesa '+esc(r.table):''} · ${ago(r.ts)}${c=='done'?' · '+LB[r.status]:''}</p>
- <div class="act">${b}<a class="sm" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(r.song+' '+r.artist)}" style="text-decoration:none;color:inherit">Buscar</a></div></div>`}
+function card(r,cnt,first){const c=colOf(r),n=cnt[key(r)];
+ const B=(a,i,t,cl='')=>`<button class="sm ${cl}" data-a="${a}" data-id="${r.id}" title="${t}">${ic(i,15)}<span>${t}</span></button>`;
+ const b=c=='new'?B('queue','list','Fila','ok')+B('played','play','Tocou')+B('rejected','x','Recusar','no')
+ :c=='queue'?B('played','check','Tocou','ok')+B('new','undo','Voltar')+B('rejected','x','Recusar','no')
+ :B('new','undo','Reabrir')+B('del','trash','Apagar','no');
+ return `<div class="card s-${esc(r.status)} ${S.fresh.has(r.id)?'fresh':''}"><div class="ct"><h4>${esc(r.song)}</h4>${n>1&&c!='done'?`<span class="tag">×${n}</span>`:''}${first?'<span class="tag nx">Próxima</span>':''}</div>
+ <p class="ar">${esc(r.artist||'Artista não informado')}</p>
+ <div class="meta"><span>${ic('user',13)}${esc(r.name||'Anônimo')}</span>${r.table?`<span>${ic('pin',13)}Mesa ${esc(r.table)}</span>`:''}<span>${ic('clock',13)}${ago(r.ts)}</span>${c=='done'?`<span class="st ${esc(r.status)}">${esc(LB[r.status]||'')}</span>`:''}</div>
+ <div class="act">${b}<a class="sm" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(r.song+' '+r.artist)}" style="text-decoration:none;color:inherit" title="Buscar no YouTube">${ic('search',15)}<span>Buscar</span></a></div></div>`}
 
 function viewReq(){
  if(S.sec!='req')return;
+ if(!$('#lists')){$('#main').innerHTML=`<div class="top"><div class="srch">${ic('search',17)}<input id="q" placeholder="Buscar música, artista ou nome" autocomplete="off"></div><button class="ib" id="bo" data-a="open"></button><button class="ib" id="bm" data-a="mute"></button><button class="ib" data-a="notif" title="Ativar notificações">${ic('bell',17)}</button></div><div class="stats" id="stats"></div><div id="lists"></div>`;
+  $('#q').value=S.q||'';$('#q').oninput=e=>{S.q=e.target.value;viewReq()}}
+ const all=L(),q=(S.q||'').toLowerCase().trim(),f=q?all.filter(r=>(r.song+' '+r.artist+' '+r.name).toLowerCase().includes(q)):all.slice();
  const c={new:[],queue:[],done:[]},cnt={};
- L().sort((a,b)=>a.ts-b.ts).forEach(r=>{c[colOf(r)].push(r);if(r.status=='new'||r.status=='queue')cnt[key(r)]=(cnt[key(r)]||0)+1});
- c.done.reverse();
- $('#bd').textContent=c.new.length||'';document.title=(c.new.length?`(${c.new.length}) `:'')+'Pedidos do DJ';
- $('#main').innerHTML=`<div class="tabs">${Object.keys(COLS).map(k=>`<button data-t="${k}" class="${S.tab==k?'on':''}">${COLS[k]} ${c[k].length}</button>`).join('')}</div>
- <div class="cols">${Object.keys(COLS).map(k=>`<section class="${S.tab==k?'on':''}"><h3>${COLS[k]}<b>${c[k].length}</b>${k=='done'&&c.done.length?'<button class="sm" data-a="clr">Limpar</button>':''}</h3>${c[k].map(r=>card(r,cnt)).join('')||'<p class="empty">Nada por aqui ainda</p>'}</section>`).join('')}</div>`;
+ all.forEach(r=>{if(r.status=='new'||r.status=='queue')cnt[key(r)]=(cnt[key(r)]||0)+1});
+ f.sort((a,b)=>a.ts-b.ts).forEach(r=>c[colOf(r)].push(r));c.done.reverse();
+ const nw=all.filter(r=>r.status=='new').length,op=S.cfg.open!==false;
+ $('#bd').textContent=nw||'';document.title=(nw?`(${nw}) `:'')+'Pedidos do DJ';
+ $('#bo').className='ib '+(op?'on':'off');$('#bo').innerHTML=ic(op?'unlock':'lock',17)+(op?'Pedidos abertos':'Pedidos fechados');
+ $('#bm').innerHTML=ic(S.cfg.mute?'volx':'vol',17);$('#bm').title=S.cfg.mute?'Som desligado':'Som ligado';
+ $('#stats').innerHTML=[['inbox','Novos',nw],['list','Na fila',all.filter(r=>r.status=='queue').length],['okc','Tocadas',all.filter(r=>r.status=='played').length],['music','Total',all.length]].map(t=>`<div class="stat">${ic(t[0],22)}<div><b>${t[2]}</b><small>${t[1]}</small></div></div>`).join('');
+ $('#lists').innerHTML=`<div class="tabs">${Object.keys(COLS).map(k=>`<button data-t="${k}" class="${S.tab==k?'on':''}">${COLS[k]} ${c[k].length}</button>`).join('')}</div>
+ <div class="cols">${Object.keys(COLS).map(k=>`<section class="${S.tab==k?'on':''}"><h3>${COLS[k]}<b>${c[k].length}</b>${k=='done'&&c.done.length?`<button class="sm" data-a="clr">${ic('trash',14)}Limpar</button>`:''}</h3>${c[k].map((r,i)=>card(r,cnt,k=='queue'&&i==0)).join('')||`<div class="empty">${ic('inbox',26)}<br>Nada por aqui ainda</div>`}</section>`).join('')}</div>`;
 }
+function exportCsv(){const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ const rows=[['Data','Música','Artista','Nome','Mesa','Situação'],...L().sort((a,b)=>a.ts-b.ts).map(r=>[new Date(r.ts).toLocaleString('pt-BR'),r.song,r.artist,r.name,r.table,LB[r.status]||r.status])];
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+rows.map(r=>r.map(q).join(';')).join('\n')],{type:'text/csv'}));a.download='pedidos.csv';a.click()}
 function onAct(e){const t=e.target.closest('button');if(!t)return;
  if(t.dataset.t){S.tab=t.dataset.t;return viewReq()}
  const a=t.dataset.a;if(!a)return;
  if(a=='clr'){L().filter(r=>colOf(r)=='done').forEach(r=>mark(r,'del'))}
  else if(a=='notif'){Notification.requestPermission().then(()=>{beep();toast('Alertas ativados')})}
- else if(a=='th'){readForm();S.cfg.theme=t.dataset.v;S.cfg.pc='';changed()}else if(a=='rpc'){readForm();S.cfg.pc='';changed()}else if(a=='rlogo'){readForm();S.cfg.logo='';changed()}else if(a=='rbg'){readForm();S.cfg.bg='';changed()}else if(a=='save')saveCfg();else if(a=='mk')mkGist();else if(a=='pdf')pdfCards();
+ else if(a=='th'){readForm();S.cfg.theme=t.dataset.v;S.cfg.pc='';changed()}else if(a=='rpc'){readForm();S.cfg.pc='';changed()}else if(a=='rlogo'){readForm();S.cfg.logo='';changed()}else if(a=='rbg'){readForm();S.cfg.bg='';changed()}else if(a=='save')saveCfg();else if(a=='mk')mkGist();else if(a=='open'){S.cfg.open=S.cfg.open===false;kv.set('cfg',S.cfg);if(G.id&&G.tok)pushCfg().then(()=>toast(S.cfg.open?'Pedidos abertos':'Pedidos fechados')).catch(()=>toast('Falha ao publicar'))}else if(a=='mute'){S.cfg.mute=!S.cfg.mute;kv.set('cfg',S.cfg)}else if(a=='csv')exportCsv();else if(a=='inst'){if(ipr)ipr.prompt();else toast('No iPhone: Compartilhar > Adicionar à Tela de Início')}else if(a=='pdf')pdfCards();
  else if(a=='copy'){navigator.clipboard.writeText(link()).then(()=>toast('Link copiado'))}
  else{const r=S.reqs.find(x=>x.id==t.dataset.id);if(r)mark(r,a)}
  viewReq()}
@@ -158,12 +237,12 @@ function mark(r,a){if(a=='del')r.del=1;else r.status=a;r.dirty=1;S.fresh.delete(
 
 function viewQr(){
  const https=location.protocol=='https:'||location.hostname=='localhost';
- $('#main').innerHTML=`<div class="panel"><h2>QR Code para os convidados</h2><br>
+ $('#main').innerHTML=`<div class="panel"><h2>${ic('qr',20)} QR Code para os convidados</h2><br>
  ${https?'':'<div class="note">Esta página não está online. Hospede o arquivo (ex.: GitHub Pages) e abra por lá para gerar QR Codes que funcionam nos celulares.</div>'}
- ${G.id?`<div class="qrs"><div class="qb" id="q0"></div><div><p style="color:var(--m);max-width:340px;word-break:break-all;font-size:12px">${esc(link()).slice(0,70)}…</p><br><button class="btn g" data-a="copy">Copiar link</button></div></div>`:'<p class="empty">Configure o Gist em Ajustes primeiro.</p>'}</div>
- <div class="panel"><h2>Cartões das mesas</h2><p style="color:var(--m)">PDF no tamanho de cartão de crédito (85,6 × 54 mm), 8 por folha A4. Cada cartão traz o QR de pedidos da mesa, Instagram e avaliação do Google.</p><br>
- <label>Quantidade de mesas</label><input id="nt" type="number" min="1" max="200" value="${S.cfg.tables||10}"><button class="btn" data-a="pdf">Baixar PDF dos cartões</button></div>
- <div class="panel"><h2>Seus QR Codes</h2><br><div class="qrs">${S.cfg.ig?'<div><div class="qb" id="qi"></div><p>Instagram</p></div>':''}${S.cfg.gr?'<div><div class="qb" id="qg"></div><p>Avaliação Google</p></div>':''}${!S.cfg.ig&&!S.cfg.gr?'<p class="empty">Informe os links em Ajustes.</p>':''}</div></div>`;
+ ${G.id?`<div class="qrs"><div class="qb" id="q0"></div><div><p style="color:var(--m);max-width:340px;word-break:break-all;font-size:12px">${esc(link()).slice(0,70)}…</p><br><button class="btn g" data-a="copy">${ic('copy',16)}Copiar link</button></div></div>`:'<p class="empty">Configure o Gist em Ajustes primeiro.</p>'}</div>
+ <div class="panel"><h2>${ic('file',20)} Cartões das mesas</h2><p style="color:var(--m)">PDF no tamanho de cartão de crédito (85,6 × 54 mm), 8 por folha A4. Cada cartão traz o QR de pedidos da mesa, Instagram e avaliação do Google.</p><br>
+ <label>Quantidade de mesas</label><input id="nt" type="number" min="1" max="200" value="${S.cfg.tables||10}"><button class="btn" data-a="pdf">${ic('download',16)}Baixar PDF dos cartões</button></div>
+ <div class="panel"><h2>${ic('ig',20)} Seus QR Codes</h2><br><div class="qrs">${S.cfg.ig?'<div><div class="qb" id="qi"></div><p>Instagram</p></div>':''}${S.cfg.gr?'<div><div class="qb" id="qg"></div><p>Avaliação Google</p></div>':''}${!S.cfg.ig&&!S.cfg.gr?'<p class="empty">Informe os links em Ajustes.</p>':''}</div></div>`;
  if(G.id)qr($('#q0'),link(),200);if(S.cfg.ig)qr($('#qi'),url(S.cfg.ig),140);if(S.cfg.gr)qr($('#qg'),S.cfg.gr,140);
 }
 function qrImg(text,lvl='M'){const d=document.createElement('div');new QRCode(d,{text,width:600,height:600,correctLevel:QRCode.CorrectLevel[lvl]});return d.querySelector('canvas').toDataURL('image/png')}
@@ -199,38 +278,39 @@ function pdfCards(){
   ink(MU);doc.setFont('helvetica','normal');doc.setFontSize(6.5);
   doc.text('Aponte a câmera e escolha',x+44,y+46.6);doc.text('a próxima faixa.',x+44,y+49.6);
  }
- doc.save('cartoes-mesas.pdf');toast('PDF pronto ✔');
+ doc.save('cartoes-mesas.pdf');toast('PDF pronto');
  },60)}
 
 function viewCfg(){const c=S.cfg;
- $('#main').innerHTML=`<div class="panel"><h2>Sincronização (GitHub Gist)</h2><br>
+ $('#main').innerHTML=`<div class="panel"><h2>${ic('cloud',20)} Sincronização (GitHub Gist)</h2><br>
  <div class="note">Crie uma conta GitHub só para isso e gere um token <b>clássico</b> com apenas a permissão <b>gist</b> (GitHub → Settings → Developer settings → Tokens (classic)). Esse token vai embutido no QR Code, então nunca use o da sua conta principal.</div>
  <label>Token</label><input id="f-tok" type="password" value="${esc(c.tok)}" autocomplete="off">
- <label>ID do Gist</label><div class="row"><input id="f-gid" value="${esc(c.gid)}" placeholder="vazio = criar novo"><button class="btn g" data-a="mk" style="flex:0 0 auto;margin-bottom:12px">Criar Gist</button></div></div>
- <div class="panel"><h2>Suas informações</h2><br>
+ <label>ID do Gist</label><div class="row"><input id="f-gid" value="${esc(c.gid)}" placeholder="vazio = criar novo"><button class="btn g" data-a="mk" style="flex:0 0 auto;margin-bottom:12px">${ic('cloud',16)}Criar Gist</button></div></div>
+ <div class="panel"><h2>${ic('user',20)} Suas informações</h2><br>
  <label>Seu nome artístico</label><input id="f-name" value="${esc(c.name)}">
  <label>Nome do evento</label><input id="f-ev" value="${esc(c.ev)}">
  <label>Frase de apresentação</label><input id="f-tag" value="${esc(c.tag)}">
  <label>Instagram (@usuario ou link)</label><input id="f-ig" value="${esc(c.ig)}">
  <label>Link de avaliação do Google</label><input id="f-gr" value="${esc(c.gr)}" placeholder="https://g.page/r/.../review">
  <label>Pedidos</label><select id="f-open"><option value="1" ${c.open!==false?'selected':''}>Abertos</option><option value="0" ${c.open===false?'selected':''}>Fechados</option></select>
- <div class="row"><button class="btn" data-a="save">Salvar e sincronizar</button><button class="btn g" data-a="notif">Ativar alertas</button></div></div>
- <div class="panel"><h2>Aparência</h2><br><label>Tema (vale para o painel, a tela do convidado e os cartões)</label>
+ <div class="row"><button class="btn" data-a="save">${ic('check',16)}Salvar e sincronizar</button><button class="btn g" data-a="notif">${ic('bell',16)}Ativar alertas</button></div></div>
+ <div class="panel"><h2>${ic('palette',20)} Aparência</h2><br><label>Tema (vale para o painel, a tela do convidado e os cartões)</label>
  <div class="ths">${Object.entries(TH).map(([k,T])=>`<button class="th ${(c.theme||'neon')==k?'on':''}" data-a="th" data-v="${k}" style="background:${T.bg};color:${T.t};border-color:${T.a}"><span class="sw" style="background:${T.a}"></span><span class="sw" style="background:${T.b}"></span><b>${T.n}</b></button>`).join('')}</div>
  <label>Cor principal (opcional)</label><div class="row"><input id="f-pc" type="color" value="${c.pc||(TH[c.theme]||TH.neon).a}" style="height:44px;padding:4px"><button class="btn g" data-a="rpc" style="flex:0 0 auto;margin:4px 0 12px">Restaurar</button></div>
  <label>Logomarca (aparece no app e nos cartões em PDF)</label><div class="up">${c.logo?`<span class="chip"><img src="${c.logo}" alt=""></span><button class="sm no" data-a="rlogo">Remover</button>`:''}<input id="f-logo" type="file" accept="image/*"></div>
- <label>Plano de fundo (imagem)</label><div class="up">${c.bg?`<img class="bgp" src="${c.bg}" alt=""><button class="sm no" data-a="rbg">Remover</button>`:''}<input id="f-bg" type="file" accept="image/*"></div></div>`}
+ <label>Plano de fundo (imagem)</label><div class="up">${c.bg?`<img class="bgp" src="${c.bg}" alt=""><button class="sm no" data-a="rbg">Remover</button>`:''}<input id="f-bg" type="file" accept="image/*"></div></div>
+ <div class="panel"><h2>${ic('download',20)} Aplicativo e dados</h2><br><p style="color:var(--m);margin-bottom:12px">Instale para abrir em tela cheia, como um aplicativo, e exporte o histórico de pedidos.</p><div class="row"><button class="btn g" data-a="inst">${ic('download',16)}Instalar aplicativo</button><button class="btn g" data-a="csv">${ic('file',16)}Exportar pedidos (CSV)</button></div></div>`}
 async function mkGist(){G.tok=$('#f-tok').value.trim();if(!G.tok)return toast('Informe o token');
  try{const r=await gh('POST','/gists',{description:'Pedidos do DJ',public:false,files:{'config.json':{content:'{}'}}});$('#f-gid').value=r.j.id;toast('Gist criado — salve')}catch(e){toast('Erro '+e.message+' (token válido?)')}}
-function setBrand(){const b=$('#bl');if(b)b.innerHTML=S.cfg.logo?`<span class="chip"><img src="${S.cfg.logo}" alt=""></span>`:'🎧';const n=$('.brand b');if(n)n.textContent=S.cfg.name||'Pedidos do DJ'}
+function setBrand(){const b=$('#bl');if(b)b.innerHTML=S.cfg.logo?`<span class="chip"><img src="${S.cfg.logo}" alt=""></span>`:ic('headphones',22);const n=$('.brand b');if(n)n.textContent=S.cfg.name||'Pedidos do DJ'}
 function readForm(){const v=i=>{const e=$('#f-'+i);return e?e.value.trim():undefined};
  const o={tok:v('tok'),gid:v('gid'),name:v('name'),ev:v('ev'),tag:v('tag'),ig:v('ig'),gr:v('gr')},op=v('open');if(op!==undefined)o.open=op=='1';
  for(const k in o)if(o[k]!==undefined)S.cfg[k]=o[k];G.tok=S.cfg.tok||'';G.id=S.cfg.gid||''}
 const pushCfg=()=>{const c=S.cfg;return gh('PATCH','/gists/'+G.id,{files:{'config.json':{content:JSON.stringify({name:c.name,ev:c.ev,tag:c.tag,ig:url(c.ig),gr:c.gr,open:c.open,theme:c.theme,pc:c.pc,logo:c.logo,bg:c.bg})}}})};
 async function saveCfg(){readForm();G.et='';await kv.set('cfg',S.cfg);if(!G.id||!G.tok)return toast('Informe token e Gist');
- try{await pushCfg();toast('Salvo e sincronizado ✔');setBrand();sync()}catch(e){toast('Falha ao sincronizar ('+e.message+')')}}
+ try{await pushCfg();toast('Salvo e sincronizado');setBrand();sync()}catch(e){toast('Falha ao sincronizar ('+e.message+')')}}
 function changed(){kv.set('cfg',S.cfg);applyTheme(S.cfg);setBrand();if(S.sec=='cfg')viewCfg();
- if(G.id&&G.tok)pushCfg().then(()=>toast('Aparência publicada ✔')).catch(()=>toast('Salva neste aparelho; falha ao publicar'))}
+ if(G.id&&G.tok)pushCfg().then(()=>toast('Aparência publicada')).catch(()=>toast('Salva neste aparelho; falha ao publicar'))}
 async function onChg(e){const i=e.target;try{
  if(i.id=='f-pc'){readForm();S.cfg.pc=i.value;return changed()}
  if(i.id=='f-logo'&&i.files[0]){readForm();S.cfg.logo=await readImg(i.files[0],300,'image/png');return changed()}
@@ -253,44 +333,50 @@ async function sync(){if(!G.id||!G.tok||busy)return;busy=1;const dot=$('#dot');
    if(news.length){news.forEach(o=>S.fresh.add(o.id));alertNew(news)}
    viewReq()}
   dot.className='on'}catch(e){dot.className='off'}busy=0}
-function beep(){try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.setValueAtTime(.25,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.7);o.start();o.stop(c.currentTime+.7)}catch{}}
+function beep(){if(S.cfg.mute)return;try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.setValueAtTime(.25,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.7);o.start();o.stop(c.currentTime+.7)}catch{}}
 function alertNew(a){beep();navigator.vibrate&&navigator.vibrate([200,100,200]);
- if('Notification'in window&&Notification.permission=='granted'){try{new Notification('🎵 '+(a.length>1?a.length+' novos pedidos':'Novo pedido'),{body:a[0].song+(a[0].artist?' — '+a[0].artist:'')})}catch{}}}
+ if('Notification'in window&&Notification.permission=='granted'){try{new Notification((a.length>1?a.length+' novos pedidos':'Novo pedido'),{body:a[0].song+(a[0].artist?' — '+a[0].artist:'')})}catch{}}}
 
 /* ================= CONVIDADO ================= */
 async function guestApp(P){
  const o=b64d(P.get('g'));G.tok=o.t;G.id=o.i;const mesa=P.get('m')||'';
- let cfg=(await kv.get('gcfg'))||{},mine=(await kv.get('mine'))||[],last='';
- function draw(){const sig=JSON.stringify([cfg,mine]);if(sig==last)return;last=sig;applyTheme(cfg);
+ let cfg=clean((await kv.get('gcfg'))||{}),mine=(await kv.get('mine'))||[],last='',lt=(await kv.get('last'))||0,ready=!!cfg.name,sending=0;
+ const SI={new:'clock',queue:'headphones',played:'okc',rejected:'x'};
+ const F=(id,lb,i,ml)=>`<label class="fld"><span>${lb}</span><div>${ic(i,17)}<input id="${id}" maxlength="${ml}" autocomplete="off"></div></label>`;
+ function draw(){const sig=JSON.stringify([cfg,mine,ready]);if(sig==last)return;last=sig;applyTheme(cfg);
   const open=cfg.open!==false,vals=$$('input').map(i=>i.value);
-  $('#app').innerHTML=`<div class="gw"><div class="hero">${cfg.logo?`<img class="lg" src="${cfg.logo}" alt="">`:''}${cfg.ev?`<div class="ev">${esc(cfg.ev)}</div>`:''}<h1>${esc(cfg.name||'DJ')}</h1><p>${esc(cfg.tag||'Peça sua música favorita!')}</p></div>
-  <div class="panel" style="max-width:none">${open?`<h3>Qual música você quer ouvir?</h3><br><label>Música *</label><input id="s" maxlength="80" autocomplete="off"><label>Artista</label><input id="a" maxlength="60" autocomplete="off">
-  <label>Seu nome</label><input id="n" maxlength="30" autocomplete="off">${mesa?`<p style="margin-bottom:12px">📍 Mesa ${esc(mesa)}</p>`:'<label>Mesa (opcional)</label><input id="m" maxlength="6">'}
-  <button class="btn w" id="send">Enviar pedido</button>`:'<h3>Os pedidos estão fechados no momento.</h3><p style="color:var(--m)">Volte em breve!</p>'}</div>
-  ${mine.length?`<div class="panel" style="max-width:none"><h3>Seus pedidos</h3>${mine.map(m=>`<div class="li"><span>${esc(m.song)}<br><small style="color:var(--m)">${esc(m.artist)}</small></span><span class="st ${m.status}">${LB[m.status]||''}</span></div>`).join('')}</div>`:''}
-  ${cfg.ig?`<div class="panel gs" style="max-width:none"><div class="qb" id="qi"></div><div><h3>Me siga</h3><p style="color:var(--m)">Fotos e agenda de eventos</p><br><a class="btn" href="${esc(cfg.ig)}" target="_blank" rel="noopener">Abrir Instagram</a></div></div>`:''}
-  ${cfg.gr?`<div class="panel gs" style="max-width:none"><div class="qb" id="qg"></div><div><h3>Gostou da festa?</h3><p style="color:var(--m)">Avalie no Google</p><br><a class="btn" href="${esc(cfg.gr)}" target="_blank" rel="noopener">Avaliar ⭐</a></div></div>`:''}</div>`;
+  $('#app').innerHTML=`<div class="gw"><div class="hero">${cfg.logo?`<img class="lg" src="${cfg.logo}" alt="">`:''}${cfg.ev?`<div class="ev">${esc(cfg.ev)}</div>`:''}
+  ${ready?`<h1>${esc(cfg.name||'DJ')}</h1><p>${esc(cfg.tag||'Escolha a próxima música da pista.')}</p>`:'<div class="sk" style="width:60%;height:34px;margin:8px auto"></div><div class="sk" style="width:80%;height:16px;margin:12px auto"></div>'}
+  <div style="margin-top:14px"><span class="badge">${open?'<i class="live"></i>Pedidos abertos':ic('lock',14)+'Pedidos fechados'}</span></div></div>
+  <div class="panel" style="max-width:none">${open?`<h3>${ic('music',20)} Qual música você quer ouvir?</h3><br>${F('s','Música *','music',80)}${F('a','Artista','mic',60)}${F('n','Seu nome','user',30)}${mesa?`<span class="pill">${ic('pin',15)}Mesa ${esc(mesa)}</span>`:F('m','Mesa (opcional)','pin',6)}<button class="btn w" id="send">${ic('send',18)}Enviar pedido</button>`:`<h3>${ic('lock',20)} Pedidos fechados</h3><p style="color:var(--m);margin-top:6px">Volte em breve. O DJ abre os pedidos durante o evento.</p>`}</div>
+  ${mine.length?`<div class="panel" style="max-width:none"><h3>${ic('list',20)} Seus pedidos</h3>${mine.map(m=>`<div class="li"><span><b>${esc(m.song)}</b><br><small style="color:var(--m)">${esc(m.artist)}</small></span><span class="st ${esc(m.status)}">${ic(SI[m.status]||'clock',14)}${esc(LB[m.status]||'')}</span></div>`).join('')}</div>`:''}
+  ${cfg.ig?`<div class="panel gs" style="max-width:none"><div class="qb" id="qi"></div><div><h3>${ic('ig',18)} Me siga</h3><p style="color:var(--m)">Fotos e agenda de eventos</p><br><a class="btn" href="${esc(cfg.ig)}" target="_blank" rel="noopener">${ic('ig',16)}Abrir Instagram</a></div></div>`:''}
+  ${cfg.gr?`<div class="panel gs" style="max-width:none"><div class="qb" id="qg"></div><div><h3>${ic('star',18)} Gostou da festa?</h3><p style="color:var(--m)">Sua avaliação ajuda muito</p><br><a class="btn" href="${esc(cfg.gr)}" target="_blank" rel="noopener">${ic('star',16)}Avaliar no Google</a></div></div>`:''}</div>`;
   $$('input').forEach((i,k)=>{if(vals[k])i.value=vals[k]});
   if(cfg.ig)qr($('#qi'),cfg.ig,96);if(cfg.gr)qr($('#qg'),cfg.gr,96);
   const b=$('#send');if(b)b.onclick=send}
  async function send(){const song=$('#s').value.trim();if(!song)return toast('Digite o nome da música');
-  const lt=await kv.get('last');if(Date.now()-lt<30000)return toast('Aguarde uns segundos para pedir outra');
+  if(Date.now()-lt<30000)return toast('Aguarde alguns segundos para pedir outra');
   const id='r_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
   const r={id,song:song.slice(0,80),artist:$('#a').value.trim().slice(0,60),name:$('#n').value.trim().slice(0,30),table:mesa||($('#m')?$('#m').value.trim():''),ts:Date.now(),status:'new'};
-  $('#send').disabled=true;
+  sending=1;$('#send').disabled=true;
   try{await gh('PATCH','/gists/'+G.id,{files:{[id+'.json']:{content:JSON.stringify(r)}}});
-   mine.unshift({id,song:r.song,artist:r.artist,status:'new'});await kv.set('mine',mine);await kv.set('last',Date.now());
-   $$('input').forEach(i=>i.value='');last='';draw();toast('Pedido enviado! 🎶')}
-  catch{toast('Não foi possível enviar. Tente de novo.');$('#send').disabled=false}}
+   mine.unshift({id,song:r.song,artist:r.artist,status:'new'});lt=Date.now();await kv.set('mine',mine);await kv.set('last',lt);
+   navigator.vibrate&&navigator.vibrate(40);$$('input').forEach(i=>i.value='');last='';sending=0;draw();toast('Pedido enviado!')}
+  catch{sending=0;toast('Não foi possível enviar. Tente de novo.');$('#send').disabled=false}}
  async function load(){try{const r=await gh('GET','/gists/'+G.id,null,G.et);if(r.nm)return;G.et=r.et;const f=r.j.files;
-   if(f['config.json'])cfg=JSON.parse(f['config.json'].content);
+   if(f['config.json'])cfg=clean(JSON.parse(f['config.json'].content));ready=true;
    mine.forEach(m=>{const x=f[m.id+'.json'];if(x)try{m.status=JSON.parse(x.content).status}catch{}});
    kv.set('gcfg',cfg);kv.set('mine',mine);draw()}catch{}}
- draw();load();
+ draw();load();setTimeout(()=>{ready=true;draw()},4000);
+ setInterval(()=>{const b=$('#send');if(!b||sending)return;const w=Math.ceil((30000-(Date.now()-lt))/1000);
+  if(w>0){b.disabled=true;b.lastChild.textContent='Aguarde '+w+'s'}else if(b.disabled){b.disabled=false;b.lastChild.textContent='Enviar pedido'}},500);
  setInterval(()=>{if(!document.hidden&&mine.some(m=>m.status=='new'||m.status=='queue'))load()},30000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});
 }
 
+let ipr;addEventListener('beforeinstallprompt',e=>{e.preventDefault();ipr=e});
+if('serviceWorker'in navigator&&location.protocol=='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 /* ================= Boot ================= */
 (async()=>{const P=new URLSearchParams(location.hash.slice(1));
  if(P.get('g')){try{return await guestApp(P)}catch{return $('#app').innerHTML='<div class="gw"><p class="empty">Link inválido. Peça um novo QR Code ao DJ.</p></div>'}}
