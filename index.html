@@ -241,8 +241,8 @@ function viewQr(){
  $('#main').innerHTML=`<div class="panel"><h2>${ic('qr',20)} QR Code para os convidados</h2><br>
  ${https?'':'<div class="note">Esta página não está online. Hospede o arquivo (ex.: GitHub Pages) e abra por lá para gerar QR Codes que funcionam nos celulares.</div>'}
  ${G.id?`<div class="qrs"><div class="qb" id="q0"></div><div><p style="color:var(--m);max-width:340px;word-break:break-all;font-size:12px">${esc(link()).slice(0,70)}…</p><br><button class="btn g" data-a="copy">${ic('copy',16)}Copiar link</button></div></div>`:'<p class="empty">Configure o Gist em Ajustes primeiro.</p>'}</div>
- <div class="panel"><h2>${ic('file',20)} Cartões das mesas</h2><p style="color:var(--m)">PDF no tamanho de cartão de crédito (85,6 × 54 mm), 8 por folha A4. Cada cartão traz a sua frase, o QR de pedidos, o Instagram e a avaliação do Google.</p><br>
- <label>Frase do cartão (você pode mudar quando quiser)</label><input id="fr" maxlength="70" value="${esc(S.cfg.phrase??'Peça sua música')}" placeholder="Ex.: Peça sua música e dance com a gente">
+ <div class="panel"><h2>${ic('file',20)} Cartões das mesas</h2><p style="color:var(--m)">PDF no tamanho de cartão de crédito (85,6 × 54 mm), 8 por folha A4. Cada cartão traz a sua frase no cabeçalho, o QR de pedidos, o Instagram, a avaliação do Google e a sua logo.</p><br>
+ <label>Frase do cabeçalho (centralizada no topo do cartão; mude quando quiser)</label><input id="fr" maxlength="70" value="${esc(S.cfg.phrase??'Peça sua música')}" placeholder="Ex.: Peça sua música e dance com a gente">
  <label>Identificar a mesa pelo QR (não aparece no cartão)</label><select id="nm"><option value="1" ${S.cfg.tagm===false?'':'selected'}>Sim, saber de qual mesa veio o pedido</option><option value="0" ${S.cfg.tagm===false?'selected':''}>Não, todos os cartões iguais</option></select>
  <label>Quantidade de cartões</label><input id="nt" type="number" min="1" max="200" value="${S.cfg.tables||10}"><button class="btn" data-a="pdf">${ic('download',16)}Baixar PDF dos cartões</button></div>
  <div class="panel"><h2>${ic('ig',20)} Seus QR Codes</h2><br><div class="qrs">${S.cfg.ig?'<div><div class="qb" id="qi"></div><p>Instagram</p></div>':''}${S.cfg.gr?'<div><div class="qb" id="qg"></div><p>Avaliação Google</p></div>':''}${!S.cfg.ig&&!S.cfg.gr?'<p class="empty">Informe os links em Ajustes.</p>':''}</div></div>`;
@@ -258,7 +258,7 @@ function cardBg(src,o){return new Promise(ok=>{const im=new Image();im.onload=()
 function pdfCards(){
  if(!G.id||!G.tok)return toast('Configure o Gist em Ajustes primeiro');
  if(!window.jspdf)return toast('Biblioteca de PDF não carregou. Verifique a internet.');
- const n=Math.min(200,Math.max(1,+$('#nt').value||10));const ph=$('#fr').value.trim()||'Peça sua música',tg=$('#nm').value=='1';S.cfg.tables=n;S.cfg.phrase=ph;S.cfg.tagm=tg;kv.set('cfg',S.cfg);toast('Gerando PDF…');
+ const n=Math.min(200,Math.max(1,+$('#nt').value||10));const ph=$('#fr').value.trim(),tg=$('#nm').value=='1';S.cfg.tables=n;S.cfg.phrase=ph;S.cfg.tagm=tg;kv.set('cfg',S.cfg);toast('Gerando PDF…');
  setTimeout(async()=>{
  const T=TH[S.cfg.theme]||TH.neon,pk=S.cfg.pc||T.a;
  const bgd=S.cfg.bg?await cardBg(S.cfg.bg,(S.cfg.bgo==null?30:+S.cfg.bgo)/100):'';
@@ -268,23 +268,26 @@ function pdfCards(){
  const smalls=[];
  if(S.cfg.ig)smalls.push(['Instagram',qrImg(url(S.cfg.ig)),'qig']);
  if(S.cfg.gr)smalls.push(['Avalie no Google',qrImg(S.cfg.gr),'qgr']);
- const nome=doc.splitTextToSize(S.cfg.name||'DJ',50)[0];
- let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),k=Math.min(44/p.width,10.5/p.height);lg={w:p.width*k,h:p.height*k}}
+ const nome=doc.splitTextToSize(S.cfg.name||'DJ',37)[0];
+ let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),k=Math.min(37/p.width,11.4/p.height);lg={w:p.width*k,h:p.height*k}}
  const qa=tg?null:qrImg(link(),'L');
- let fs=10,pl;doc.setFont('helvetica','bold');for(;fs>=6;fs-=.5){doc.setFontSize(fs);pl=doc.splitTextToSize(ph,37);if(pl.length<=3&&41.6+fs*.28+(pl.length-1)*fs*.423<=51.5)break}
+ let fs=13,pl=null;doc.setFont('helvetica','bold');
+ if(ph){for(;fs>=8;fs-=.5){doc.setFontSize(fs);if(doc.getTextWidth(ph)<=76){pl=[ph];break}}
+  if(!pl)for(fs=11;fs>=6;fs-=.5){doc.setFontSize(fs);pl=doc.splitTextToSize(ph,76);if(pl.length<=2)break}}
  for(let i=1;i<=n;i++){
   const k=(i-1)%8;if(i>1&&k==0)doc.addPage();
   const x=ox+(k%2)*(W+gx),y=oy+Math.floor(k/2)*(H+gy);
   fill(BG);doc.roundedRect(x,y,W,H,3,3,'F');if(bgd)doc.addImage(bgd,'PNG',x,y,W,H,'bgc');doc.setDrawColor(...LN);doc.setLineWidth(.25);doc.roundedRect(x,y,W,H,3,3,'S');
-  if(lg){doc.addImage(S.cfg.logo,'PNG',x+4.5,y+3+(10.5-lg.h)/2,lg.w,lg.h,'logo')}
-  else{ink(AM);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text(nome,x+4.5,y+8.6)}
+  if(lg){doc.addImage(S.cfg.logo,'PNG',x+44+(37-lg.w)/2,y+38.8+(11.4-lg.h)/2,lg.w,lg.h,'logo')}
+  else{ink(AM);doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.text(nome,x+62.5,y+46,{align:'center'})}
   fill(WH);doc.roundedRect(x+4.5,y+15.5,34,34,2.5,2.5,'F');
   doc.addImage(tg?qrImg(link(i),'L'):qa,'PNG',x+6.5,y+17.5,30,30,tg?undefined:'qmain');
   smalls.forEach((q,j)=>{const bx=x+44+j*19.5;
    fill(WH);doc.roundedRect(bx,y+15.5,17,17,2,2,'F');doc.addImage(q[1],'PNG',bx+1.5,y+17,14,14,q[2]);
    ink(TX);doc.setFont('helvetica','normal');doc.setFontSize(5.5);doc.text(q[0],bx+8.5,y+35.5,{align:'center'})});
-  fill(PK);doc.rect(x+44,y+38,10,0.7,'F');
-  ink(TX);doc.setFont('helvetica','bold');doc.setFontSize(fs);doc.text(pl.slice(0,3),x+44,y+41.6+fs*.28,{lineHeightFactor:1.2});
+  if(pl){const n2=Math.min(2,pl.length);ink(TX);doc.setFont('helvetica','bold');doc.setFontSize(fs);
+   doc.text(pl.slice(0,2),x+W/2,y+8.5-(n2-1)*fs*.423/2+fs*.12,{align:'center',lineHeightFactor:1.2});
+   fill(PK);doc.rect(x+W/2-6,y+13.4,12,0.6,'F')}
  }
  doc.save('cartoes-mesas.pdf');toast('PDF pronto');
  },60)}
