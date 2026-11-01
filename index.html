@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1a0f2e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<title>Pedidos do DJ</title>
+<style>
+:root{--bg:#160d28;--p:#221541;--p2:#2e1d56;--l:#3d2a6e;--t:#f6f1ff;--m:#a597c9;--a:#ff4d8d;--b:#ffb938;--ok:#3ddc97;--no:#ff6b6b}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--t);font:15px/1.4 "Trebuchet MS",system-ui,sans-serif;min-height:100dvh;padding:env(safe-area-inset-top) 0 0}
+button,input,select{font:inherit;color:inherit}
+h1,h2,h3{font-family:Georgia,serif;font-weight:700}
+.btn{background:var(--a);border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;color:#fff}
+.btn.g{background:var(--p2);border:1px solid var(--l)}
+.sm{background:var(--p2);border:1px solid var(--l);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:13px}
+.sm.ok{background:var(--ok);color:#06281a;border:0;font-weight:700}.sm.no{color:var(--no)}
+input,select{width:100%;background:var(--bg);border:1px solid var(--l);border-radius:10px;padding:11px 12px;margin:4px 0 12px}
+input:focus,button:focus-visible{outline:2px solid var(--b);outline-offset:1px}
+label{font-size:13px;color:var(--m)}
+.shell{display:grid;grid-template-columns:220px 1fr;min-height:100dvh}
+nav{background:var(--p);padding:20px 12px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--l)}
+.brand{display:flex;gap:8px;align-items:center;margin-bottom:18px;font-family:Georgia,serif;font-size:17px}
+#dot{width:10px;height:10px;border-radius:50%;background:var(--m);margin-left:auto}#dot.on{background:var(--ok)}#dot.off{background:var(--no)}
+nav a{display:flex;gap:10px;align-items:center;padding:11px 12px;border-radius:10px;cursor:pointer;color:var(--m)}
+nav a.on{background:var(--p2);color:var(--t)}
+nav em{margin-left:auto;background:var(--a);color:#fff;border-radius:99px;padding:0 8px;font-style:normal;font-size:12px}nav em:empty{display:none}
+main{padding:24px;overflow:auto}
+.tabs{display:none}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start}
+.cols section>h3{margin-bottom:12px;display:flex;gap:8px;align-items:center}
+.cols h3 b{background:var(--p2);border-radius:99px;padding:0 9px;font-size:13px;font-family:system-ui}
+.cols h3 .sm{margin-left:auto}
+.card{background:var(--p);border:1px solid var(--l);border-radius:14px;padding:14px;margin-bottom:12px}
+.card.fresh{border-color:var(--a);box-shadow:0 0 0 1px var(--a)}
+.card h4{font-size:17px;font-family:Georgia,serif}.card p{color:var(--m);font-size:13px;margin-top:2px}
+.card .act{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.tag{display:inline-block;background:var(--b);color:#2b1a00;border-radius:6px;padding:0 7px;font-size:12px;font-weight:700;margin-left:6px}
+.empty{color:var(--m);padding:18px;text-align:center;border:1px dashed var(--l);border-radius:14px}
+.panel{background:var(--p);border:1px solid var(--l);border-radius:16px;padding:20px;margin-bottom:18px;max-width:720px}
+.qrs{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.qb{background:#fff;padding:10px;border-radius:12px;display:inline-block}.qb img,.qb canvas{display:block}
+.note{background:var(--p2);border-left:4px solid var(--b);padding:10px 12px;border-radius:8px;margin-bottom:14px;font-size:13px}
+.row{display:flex;gap:8px}.row>*{flex:1}
+#print{display:none}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--t);color:#1a0f2e;padding:10px 18px;border-radius:99px;font-weight:700;display:none;z-index:9}
+/* convidado */
+.g{max-width:480px;margin:0 auto;padding:22px 18px 40px}
+.hero{text-align:center;padding:10px 0 20px}.hero h1{font-size:30px}.hero p{color:var(--m)}
+.hero .ev{color:var(--b);font-weight:700;margin-bottom:6px}
+.gs{display:flex;gap:12px;align-items:center}.gs .qb{padding:6px}
+.st{font-size:12px;border-radius:99px;padding:2px 10px;background:var(--p2);white-space:nowrap}.st.queue{background:var(--b);color:#2b1a00}.st.played{background:var(--ok);color:#06281a}.st.rejected{color:var(--no)}
+.li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--l)}
+.btn.w{width:100%;padding:14px;font-size:16px}
+a.btn{display:inline-block;text-decoration:none;text-align:center}
+@media(max-width:860px){
+ .shell{grid-template-columns:1fr;padding-bottom:70px}
+ nav{position:fixed;bottom:0;left:0;right:0;flex-direction:row;justify-content:space-around;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-right:0;border-top:1px solid var(--l);z-index:5}
+ nav .brand{display:none}nav a{flex-direction:column;gap:2px;font-size:12px;padding:6px 18px;position:relative}
+ nav em{position:absolute;top:0;right:8px;margin:0}
+ main{padding:16px}
+ .tabs{display:flex;gap:6px;margin-bottom:14px}.tabs button{flex:1;background:var(--p);border:1px solid var(--l);border-radius:10px;padding:9px 4px;cursor:pointer}
+ .tabs button.on{background:var(--a);border-color:var(--a)}
+ .cols{display:block}.cols section{display:none}.cols section.on{display:block}
+}
+@media print{body>*{display:none!important}#print{display:grid!important;grid-template-columns:1fr 1fr;gap:12px;background:#fff;color:#000}
+ #print div{border:2px solid #000;border-radius:14px;padding:16px;text-align:center;page-break-inside:avoid}#print h2{font-size:26px}#print .qb{padding:0}}
+</style></head><body>
+<div id="app"></div><div id="print"></div><div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ---------- IndexedDB ---------- */
+const DB=new Promise((ok,er)=>{const q=indexedDB.open('djpedidos',1);q.onupgradeneeded=()=>{q.result.createObjectStore('kv');q.result.createObjectStore('req',{keyPath:'id'})};q.onsuccess=()=>ok(q.result);q.onerror=()=>er(q.error)});
+const tx=(s,m,f)=>DB.then(d=>new Promise((ok,er)=>{const t=d.transaction(s,m),q=f(t.objectStore(s));t.oncomplete=()=>ok(q&&q.result);t.onerror=()=>er(t.error)}));
+const kv={get:k=>tx('kv','readonly',o=>o.get(k)),set:(k,v)=>tx('kv','readwrite',o=>o.put(v,k))};
+const R={all:()=>tx('req','readonly',o=>o.getAll()),put:v=>tx('req','readwrite',o=>o.put(v)),del:id=>tx('req','readwrite',o=>o.delete(id))};
+/* ---------- Gist ---------- */
+const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const b64d=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));
+const G={tok:'',id:'',et:''};
+async function gh(m,p,b,et){const r=await fetch('https://api.github.com'+p,{method:m,headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+G.tok,...(b?{'Content-Type':'application/json'}:{}),...(et?{'If-None-Match':et}:{})},body:b?JSON.stringify(b):undefined});
+ if(r.status==304)return{nm:1};if(!r.ok)throw Error(r.status);return{j:await r.json(),et:r.headers.get('ETag')}}
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2600)}
+function qr(el,text,n=140){el.innerHTML='';new QRCode(el,{text,width:n,height:n,correctLevel:QRCode.CorrectLevel.M})}
+const url=s=>!s?'':/^https?:/i.test(s)?s:'https://instagram.com/'+s.replace(/^@/,'');
+const ago=ts=>{const m=Math.round((Date.now()-ts)/6e4);return m<1?'agora':m<60?m+' min':Math.floor(m/60)+'h'};
+const LB={new:'Enviado',queue:'Na fila 🎧',played:'Tocou! 🎉',rejected:'Não rolou'};
+
+/* ================= DJ ================= */
+const S={cfg:{},reqs:[],sec:'req',tab:'new',fresh:new Set()};
+const L=()=>S.reqs.filter(r=>!r.del);
+const colOf=r=>r.status=='new'?'new':r.status=='queue'?'queue':'done';
+const COLS={new:'Novos',queue:'Na fila',done:'Finalizados'};
+const key=r=>(r.song+r.artist).toLowerCase().replace(/\s+/g,' ').trim();
+const link=m=>location.href.split('#')[0]+'#g='+b64e({i:G.id,t:G.tok})+(m?'&m='+m:'');
+
+function djApp(){
+ $('#app').innerHTML=`<div class="shell"><nav><div class="brand">🎧 <b>${esc(S.cfg.name||'Pedidos do DJ')}</b><i id="dot"></i></div>
+ <a data-s="req">🎵<span>Pedidos</span><em id="bd"></em></a><a data-s="qr">▦<span>QR Codes</span></a><a data-s="cfg">⚙️<span>Ajustes</span></a></nav><main id="main"></main></div>`;
+ $$('nav a').forEach(a=>a.onclick=()=>go(a.dataset.s));
+ $('#main').onclick=onAct;
+ go(S.cfg.tok&&S.cfg.gid?'req':'cfg');
+ setInterval(sync,5000);sync();
+}
+function go(s){S.sec=s;$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.s==s));({req:viewReq,qr:viewQr,cfg:viewCfg})[s]()}
+
+function card(r,cnt){const c=colOf(r),n=cnt[key(r)];
+ const b=c=='new'?`<button class="sm ok" data-a="queue" data-id="${r.id}">Na fila</button><button class="sm" data-a="played" data-id="${r.id}">Tocou</button><button class="sm no" data-a="rejected" data-id="${r.id}">Recusar</button>`
+ :c=='queue'?`<button class="sm ok" data-a="played" data-id="${r.id}">Tocou</button><button class="sm" data-a="new" data-id="${r.id}">Voltar</button><button class="sm no" data-a="rejected" data-id="${r.id}">Recusar</button>`
+ :`<button class="sm" data-a="new" data-id="${r.id}">Reabrir</button><button class="sm no" data-a="del" data-id="${r.id}">Apagar</button>`;
+ return `<div class="card ${S.fresh.has(r.id)?'fresh':''}"><h4>${esc(r.song)}${n>1&&c!='done'?`<span class="tag">×${n}</span>`:''}</h4>
+ <p>${esc(r.artist||'—')}</p><p>${esc(r.name||'Anônimo')}${r.table?' · Mesa '+esc(r.table):''} · ${ago(r.ts)}${c=='done'?' · '+LB[r.status]:''}</p>
+ <div class="act">${b}<a class="sm" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(r.song+' '+r.artist)}" style="text-decoration:none;color:inherit">Buscar</a></div></div>`}
+
+function viewReq(){
+ if(S.sec!='req')return;
+ const c={new:[],queue:[],done:[]},cnt={};
+ L().sort((a,b)=>a.ts-b.ts).forEach(r=>{c[colOf(r)].push(r);if(r.status=='new'||r.status=='queue')cnt[key(r)]=(cnt[key(r)]||0)+1});
+ c.done.reverse();
+ $('#bd').textContent=c.new.length||'';document.title=(c.new.length?`(${c.new.length}) `:'')+'Pedidos do DJ';
+ $('#main').innerHTML=`<div class="tabs">${Object.keys(COLS).map(k=>`<button data-t="${k}" class="${S.tab==k?'on':''}">${COLS[k]} ${c[k].length}</button>`).join('')}</div>
+ <div class="cols">${Object.keys(COLS).map(k=>`<section class="${S.tab==k?'on':''}"><h3>${COLS[k]}<b>${c[k].length}</b>${k=='done'&&c.done.length?'<button class="sm" data-a="clr">Limpar</button>':''}</h3>${c[k].map(r=>card(r,cnt)).join('')||'<p class="empty">Nada por aqui ainda</p>'}</section>`).join('')}</div>`;
+}
+function onAct(e){const t=e.target.closest('button');if(!t)return;
+ if(t.dataset.t){S.tab=t.dataset.t;return viewReq()}
+ const a=t.dataset.a;if(!a)return;
+ if(a=='clr'){L().filter(r=>colOf(r)=='done').forEach(r=>mark(r,'del'))}
+ else if(a=='notif'){Notification.requestPermission().then(()=>{beep();toast('Alertas ativados')})}
+ else if(a=='save')saveCfg();else if(a=='mk')mkGist();else if(a=='print')printCards();
+ else if(a=='copy'){navigator.clipboard.writeText(link()).then(()=>toast('Link copiado'))}
+ else{const r=S.reqs.find(x=>x.id==t.dataset.id);if(r)mark(r,a)}
+ viewReq()}
+function mark(r,a){if(a=='del')r.del=1;else r.status=a;r.dirty=1;S.fresh.delete(r.id);R.put(r);viewReq();sync()}
+
+function viewQr(){
+ const https=location.protocol=='https:'||location.hostname=='localhost';
+ $('#main').innerHTML=`<div class="panel"><h2>QR Code para os convidados</h2><br>
+ ${https?'':'<div class="note">Esta página não está online. Hospede o arquivo (ex.: GitHub Pages) e abra por lá para gerar QR Codes que funcionam nos celulares.</div>'}
+ ${G.id?`<div class="qrs"><div class="qb" id="q0"></div><div><p style="color:var(--m);max-width:340px;word-break:break-all;font-size:12px">${esc(link()).slice(0,70)}…</p><br><button class="btn g" data-a="copy">Copiar link</button></div></div>`:'<p class="empty">Configure o Gist em Ajustes primeiro.</p>'}</div>
+ <div class="panel"><h2>Cartões das mesas</h2><p style="color:var(--m)">Um QR por mesa, já com o número da mesa no pedido.</p><br>
+ <label>Quantidade de mesas</label><input id="nt" type="number" min="1" max="200" value="${S.cfg.tables||10}"><button class="btn" data-a="print">Imprimir cartões</button></div>
+ <div class="panel"><h2>Seus QR Codes</h2><br><div class="qrs">${S.cfg.ig?'<div><div class="qb" id="qi"></div><p>Instagram</p></div>':''}${S.cfg.gr?'<div><div class="qb" id="qg"></div><p>Avaliação Google</p></div>':''}${!S.cfg.ig&&!S.cfg.gr?'<p class="empty">Informe os links em Ajustes.</p>':''}</div></div>`;
+ if(G.id)qr($('#q0'),link(),200);if(S.cfg.ig)qr($('#qi'),url(S.cfg.ig),140);if(S.cfg.gr)qr($('#qg'),S.cfg.gr,140);
+}
+function printCards(){const n=Math.min(200,+$('#nt').value||10);S.cfg.tables=n;kv.set('cfg',S.cfg);const P=$('#print');P.innerHTML='';
+ for(let i=1;i<=n;i++){const d=document.createElement('div');d.innerHTML=`<h2>Mesa ${i}</h2><p>Peça sua música 🎶</p><br><div class="qb" style="margin:auto"></div><br><b>${esc(S.cfg.name||'')}</b>`;P.append(d);qr($('.qb',d),link(i),150)}
+ setTimeout(()=>window.print(),500)}
+
+function viewCfg(){const c=S.cfg;
+ $('#main').innerHTML=`<div class="panel"><h2>Sincronização (GitHub Gist)</h2><br>
+ <div class="note">Crie uma conta GitHub só para isso e gere um token <b>clássico</b> com apenas a permissão <b>gist</b> (GitHub → Settings → Developer settings → Tokens (classic)). Esse token vai embutido no QR Code, então nunca use o da sua conta principal.</div>
+ <label>Token</label><input id="f-tok" type="password" value="${esc(c.tok)}" autocomplete="off">
+ <label>ID do Gist</label><div class="row"><input id="f-gid" value="${esc(c.gid)}" placeholder="vazio = criar novo"><button class="btn g" data-a="mk" style="flex:0 0 auto;margin-bottom:12px">Criar Gist</button></div></div>
+ <div class="panel"><h2>Suas informações</h2><br>
+ <label>Seu nome artístico</label><input id="f-name" value="${esc(c.name)}">
+ <label>Nome do evento</label><input id="f-ev" value="${esc(c.ev)}">
+ <label>Frase de apresentação</label><input id="f-tag" value="${esc(c.tag)}">
+ <label>Instagram (@usuario ou link)</label><input id="f-ig" value="${esc(c.ig)}">
+ <label>Link de avaliação do Google</label><input id="f-gr" value="${esc(c.gr)}" placeholder="https://g.page/r/.../review">
+ <label>Pedidos</label><select id="f-open"><option value="1" ${c.open!==false?'selected':''}>Abertos</option><option value="0" ${c.open===false?'selected':''}>Fechados</option></select>
+ <div class="row"><button class="btn" data-a="save">Salvar e sincronizar</button><button class="btn g" data-a="notif">Ativar alertas</button></div></div>`}
+async function mkGist(){G.tok=$('#f-tok').value.trim();if(!G.tok)return toast('Informe o token');
+ try{const r=await gh('POST','/gists',{description:'Pedidos do DJ',public:false,files:{'config.json':{content:'{}'}}});$('#f-gid').value=r.j.id;toast('Gist criado — salve')}catch(e){toast('Erro '+e.message+' (token válido?)')}}
+async function saveCfg(){const v=i=>$('#f-'+i).value.trim();
+ S.cfg={...S.cfg,tok:v('tok'),gid:v('gid'),name:v('name'),ev:v('ev'),tag:v('tag'),ig:v('ig'),gr:v('gr'),open:v('open')=='1'};
+ G.tok=S.cfg.tok;G.id=S.cfg.gid;G.et='';await kv.set('cfg',S.cfg);
+ if(!G.id||!G.tok)return toast('Informe token e Gist');
+ try{const c=S.cfg;await gh('PATCH','/gists/'+G.id,{files:{'config.json':{content:JSON.stringify({name:c.name,ev:c.ev,tag:c.tag,ig:url(c.ig),gr:c.gr,open:c.open})}}});toast('Salvo e sincronizado ✔');$('.brand b').textContent=c.name||'Pedidos do DJ';sync()}catch(e){toast('Falha ao sincronizar ('+e.message+')')}}
+
+let busy=0;
+async function sync(){if(!G.id||!G.tok||busy)return;busy=1;const dot=$('#dot');
+ try{
+  const dirty=S.reqs.filter(r=>r.dirty);
+  if(dirty.length){const files={};dirty.forEach(r=>{const{dirty:_,del,...o}=r;files[r.id+'.json']=del?null:{content:JSON.stringify(o)}});
+   await gh('PATCH','/gists/'+G.id,{files});G.et='';
+   for(const r of dirty){if(r.del){await R.del(r.id)}else{r.dirty=0;await R.put(r)}}S.reqs=S.reqs.filter(r=>!(r.del&&dirty.includes(r)))}
+  const res=await gh('GET','/gists/'+G.id,null,G.et);
+  if(!res.nm){G.et=res.et;const rem={};let nw=[];
+   for(const[n,f]of Object.entries(res.j.files)){if(!/^r_.*\.json$/.test(n))continue;try{const o=JSON.parse(f.content);rem[o.id]=o}catch{}}
+   for(const o of Object.values(rem)){const l=S.reqs.find(x=>x.id==o.id);
+    if(!l){S.reqs.push(o);R.put(o);nw.push(o)}else if(!l.dirty&&l.status!=o.status){l.status=o.status;R.put(l)}}
+   for(const l of S.reqs.slice())if(!rem[l.id]&&!l.dirty){S.reqs.splice(S.reqs.indexOf(l),1);R.del(l.id)}
+   const news=nw.filter(o=>o.status=='new');
+   if(news.length){news.forEach(o=>S.fresh.add(o.id));alertNew(news)}
+   viewReq()}
+  dot.className='on'}catch(e){dot.className='off'}busy=0}
+function beep(){try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.setValueAtTime(.25,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.7);o.start();o.stop(c.currentTime+.7)}catch{}}
+function alertNew(a){beep();navigator.vibrate&&navigator.vibrate([200,100,200]);
+ if('Notification'in window&&Notification.permission=='granted'){try{new Notification('🎵 '+(a.length>1?a.length+' novos pedidos':'Novo pedido'),{body:a[0].song+(a[0].artist?' — '+a[0].artist:'')})}catch{}}}
+
+/* ================= CONVIDADO ================= */
+async function guestApp(P){
+ const o=b64d(P.get('g'));G.tok=o.t;G.id=o.i;const mesa=P.get('m')||'';
+ let cfg=(await kv.get('gcfg'))||{},mine=(await kv.get('mine'))||[],last='';
+ function draw(){const sig=JSON.stringify([cfg,mine]);if(sig==last)return;last=sig;
+  const open=cfg.open!==false,vals=$$('input').map(i=>i.value);
+  $('#app').innerHTML=`<div class="g"><div class="hero">${cfg.ev?`<div class="ev">${esc(cfg.ev)}</div>`:''}<h1>${esc(cfg.name||'DJ')}</h1><p>${esc(cfg.tag||'Peça sua música favorita!')}</p></div>
+  <div class="panel" style="max-width:none">${open?`<h3>Qual música você quer ouvir?</h3><br><label>Música *</label><input id="s" maxlength="80" autocomplete="off"><label>Artista</label><input id="a" maxlength="60" autocomplete="off">
+  <label>Seu nome</label><input id="n" maxlength="30" autocomplete="off">${mesa?`<p style="margin-bottom:12px">📍 Mesa ${esc(mesa)}</p>`:'<label>Mesa (opcional)</label><input id="m" maxlength="6">'}
+  <button class="btn w" id="send">Enviar pedido</button>`:'<h3>Os pedidos estão fechados no momento.</h3><p style="color:var(--m)">Volte em breve!</p>'}</div>
+  ${mine.length?`<div class="panel" style="max-width:none"><h3>Seus pedidos</h3>${mine.map(m=>`<div class="li"><span>${esc(m.song)}<br><small style="color:var(--m)">${esc(m.artist)}</small></span><span class="st ${m.status}">${LB[m.status]||''}</span></div>`).join('')}</div>`:''}
+  ${cfg.ig?`<div class="panel gs" style="max-width:none"><div class="qb" id="qi"></div><div><h3>Me siga</h3><p style="color:var(--m)">Fotos e agenda de eventos</p><br><a class="btn" href="${esc(cfg.ig)}" target="_blank" rel="noopener">Abrir Instagram</a></div></div>`:''}
+  ${cfg.gr?`<div class="panel gs" style="max-width:none"><div class="qb" id="qg"></div><div><h3>Gostou da festa?</h3><p style="color:var(--m)">Avalie no Google</p><br><a class="btn" href="${esc(cfg.gr)}" target="_blank" rel="noopener">Avaliar ⭐</a></div></div>`:''}</div>`;
+  $$('input').forEach((i,k)=>{if(vals[k])i.value=vals[k]});
+  if(cfg.ig)qr($('#qi'),cfg.ig,96);if(cfg.gr)qr($('#qg'),cfg.gr,96);
+  const b=$('#send');if(b)b.onclick=send}
+ async function send(){const song=$('#s').value.trim();if(!song)return toast('Digite o nome da música');
+  const lt=await kv.get('last');if(Date.now()-lt<30000)return toast('Aguarde uns segundos para pedir outra');
+  const id='r_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  const r={id,song:song.slice(0,80),artist:$('#a').value.trim().slice(0,60),name:$('#n').value.trim().slice(0,30),table:mesa||($('#m')?$('#m').value.trim():''),ts:Date.now(),status:'new'};
+  $('#send').disabled=true;
+  try{await gh('PATCH','/gists/'+G.id,{files:{[id+'.json']:{content:JSON.stringify(r)}}});
+   mine.unshift({id,song:r.song,artist:r.artist,status:'new'});await kv.set('mine',mine);await kv.set('last',Date.now());
+   $$('input').forEach(i=>i.value='');last='';draw();toast('Pedido enviado! 🎶')}
+  catch{toast('Não foi possível enviar. Tente de novo.');$('#send').disabled=false}}
+ async function load(){try{const r=await gh('GET','/gists/'+G.id,null,G.et);if(r.nm)return;G.et=r.et;const f=r.j.files;
+   if(f['config.json'])cfg=JSON.parse(f['config.json'].content);
+   mine.forEach(m=>{const x=f[m.id+'.json'];if(x)try{m.status=JSON.parse(x.content).status}catch{}});
+   kv.set('gcfg',cfg);kv.set('mine',mine);draw()}catch{}}
+ draw();load();
+ setInterval(()=>{if(!document.hidden&&mine.some(m=>m.status=='new'||m.status=='queue'))load()},30000);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});
+}
+
+/* ================= Boot ================= */
+(async()=>{const P=new URLSearchParams(location.hash.slice(1));
+ if(P.get('g')){try{return await guestApp(P)}catch{return $('#app').innerHTML='<div class="g"><p class="empty">Link inválido. Peça um novo QR Code ao DJ.</p></div>'}}
+ S.cfg=(await kv.get('cfg'))||{};G.tok=S.cfg.tok||'';G.id=S.cfg.gid||'';S.reqs=await R.all();djApp()})();
+</script></body></html>
