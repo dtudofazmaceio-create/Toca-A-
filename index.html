@@ -53,7 +53,7 @@ main{padding:24px;overflow:auto}
 .li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--l)}
 .btn.w{width:100%;padding:14px;font-size:16px}
 a.btn{display:inline-block;text-decoration:none;text-align:center}
-.chip{background:#fff;border-radius:8px;padding:3px 6px;display:inline-flex}.chip img{height:24px;max-width:90px;object-fit:contain}
+.chip{display:inline-flex}.chip img{height:24px;max-width:90px;object-fit:contain}
 .ic{flex:none;vertical-align:middle}
 .btn,a.btn{display:inline-flex;gap:8px;align-items:center;justify-content:center}
 .sm{display:inline-flex;gap:5px;align-items:center}
@@ -86,7 +86,7 @@ a.btn{display:inline-block;text-decoration:none;text-align:center}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 input[type=range]{padding:0;border:0;background:none;accent-color:var(--a)}
 #bgl{position:fixed;inset:0;z-index:-1}
-.lg{display:block;margin:0 auto 12px;max-height:84px;max-width:70%;object-fit:contain;background:#fff;padding:8px 12px;border-radius:14px}
+.lg{display:block;margin:0 auto 12px;max-height:84px;max-width:70%;object-fit:contain}
 .ths{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:6px 0 16px}
 .th{border:2px solid;border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:6px;align-items:center;font-family:inherit}.th.on{box-shadow:0 0 0 3px var(--t)}
 .sw{width:16px;height:16px;border-radius:50%;display:inline-block}
@@ -230,7 +230,7 @@ function onAct(e){const t=e.target.closest('button');if(!t)return;
  const a=t.dataset.a;if(!a)return;
  if(a=='clr'){L().filter(r=>colOf(r)=='done').forEach(r=>mark(r,'del'))}
  else if(a=='notif'){Notification.requestPermission().then(()=>{beep();toast('Alertas ativados')})}
- else if(a=='th'){readForm();S.cfg.theme=t.dataset.v;S.cfg.pc='';changed()}else if(a=='rpc'){readForm();S.cfg.pc='';changed()}else if(a=='rlogo'){readForm();S.cfg.logo='';changed()}else if(a=='rbg'){readForm();S.cfg.bg='';changed()}else if(a=='save')saveCfg();else if(a=='mk')mkGist();else if(a=='open'){S.cfg.open=S.cfg.open===false;kv.set('cfg',S.cfg);if(G.id&&G.tok)pushCfg().then(()=>toast(S.cfg.open?'Pedidos abertos':'Pedidos fechados')).catch(()=>toast('Falha ao publicar'))}else if(a=='mute'){S.cfg.mute=!S.cfg.mute;kv.set('cfg',S.cfg)}else if(a=='csv')exportCsv();else if(a=='inst'){if(ipr)ipr.prompt();else toast('No iPhone: Compartilhar > Adicionar à Tela de Início')}else if(a=='pdf')pdfCards();
+ else if(a=='th'){readForm();S.cfg.theme=t.dataset.v;S.cfg.pc='';changed()}else if(a=='rpc'){readForm();S.cfg.pc='';changed()}else if(a=='rwhite'){readForm();cutWhite(S.cfg.logo).then(d=>{S.cfg.logo=d;changed()})}else if(a=='rlogo'){readForm();S.cfg.logo='';changed()}else if(a=='rbg'){readForm();S.cfg.bg='';changed()}else if(a=='save')saveCfg();else if(a=='mk')mkGist();else if(a=='open'){S.cfg.open=S.cfg.open===false;kv.set('cfg',S.cfg);if(G.id&&G.tok)pushCfg().then(()=>toast(S.cfg.open?'Pedidos abertos':'Pedidos fechados')).catch(()=>toast('Falha ao publicar'))}else if(a=='mute'){S.cfg.mute=!S.cfg.mute;kv.set('cfg',S.cfg)}else if(a=='csv')exportCsv();else if(a=='inst'){if(ipr)ipr.prompt();else toast('No iPhone: Compartilhar > Adicionar à Tela de Início')}else if(a=='pdf')pdfCards();
  else if(a=='copy'){navigator.clipboard.writeText(link()).then(()=>toast('Link copiado'))}
  else{const r=S.reqs.find(x=>x.id==t.dataset.id);if(r)mark(r,a)}
  viewReq()}
@@ -241,19 +241,24 @@ function viewQr(){
  $('#main').innerHTML=`<div class="panel"><h2>${ic('qr',20)} QR Code para os convidados</h2><br>
  ${https?'':'<div class="note">Esta página não está online. Hospede o arquivo (ex.: GitHub Pages) e abra por lá para gerar QR Codes que funcionam nos celulares.</div>'}
  ${G.id?`<div class="qrs"><div class="qb" id="q0"></div><div><p style="color:var(--m);max-width:340px;word-break:break-all;font-size:12px">${esc(link()).slice(0,70)}…</p><br><button class="btn g" data-a="copy">${ic('copy',16)}Copiar link</button></div></div>`:'<p class="empty">Configure o Gist em Ajustes primeiro.</p>'}</div>
- <div class="panel"><h2>${ic('file',20)} Cartões das mesas</h2><p style="color:var(--m)">PDF no tamanho de cartão de crédito (85,6 × 54 mm), 8 por folha A4. Cada cartão traz o QR de pedidos da mesa, Instagram e avaliação do Google.</p><br>
- <label>Quantidade de mesas</label><input id="nt" type="number" min="1" max="200" value="${S.cfg.tables||10}"><button class="btn" data-a="pdf">${ic('download',16)}Baixar PDF dos cartões</button></div>
+ <div class="panel"><h2>${ic('file',20)} Cartões das mesas</h2><p style="color:var(--m)">PDF no tamanho de cartão de crédito (85,6 × 54 mm), 8 por folha A4. Cada cartão traz a sua frase, o QR de pedidos, o Instagram e a avaliação do Google.</p><br>
+ <label>Frase do cartão (você pode mudar quando quiser)</label><input id="fr" maxlength="70" value="${esc(S.cfg.phrase??'Peça sua música')}" placeholder="Ex.: Peça sua música e dance com a gente">
+ <label>Identificar a mesa pelo QR (não aparece no cartão)</label><select id="nm"><option value="1" ${S.cfg.tagm===false?'':'selected'}>Sim, saber de qual mesa veio o pedido</option><option value="0" ${S.cfg.tagm===false?'selected':''}>Não, todos os cartões iguais</option></select>
+ <label>Quantidade de cartões</label><input id="nt" type="number" min="1" max="200" value="${S.cfg.tables||10}"><button class="btn" data-a="pdf">${ic('download',16)}Baixar PDF dos cartões</button></div>
  <div class="panel"><h2>${ic('ig',20)} Seus QR Codes</h2><br><div class="qrs">${S.cfg.ig?'<div><div class="qb" id="qi"></div><p>Instagram</p></div>':''}${S.cfg.gr?'<div><div class="qb" id="qg"></div><p>Avaliação Google</p></div>':''}${!S.cfg.ig&&!S.cfg.gr?'<p class="empty">Informe os links em Ajustes.</p>':''}</div></div>`;
  if(G.id)qr($('#q0'),link(),200);if(S.cfg.ig)qr($('#qi'),url(S.cfg.ig),140);if(S.cfg.gr)qr($('#qg'),S.cfg.gr,140);
 }
 function qrImg(text,lvl='M'){const d=document.createElement('div');new QRCode(d,{text,width:600,height:600,correctLevel:QRCode.CorrectLevel[lvl]});return d.querySelector('canvas').toDataURL('image/png')}
+function cutWhite(src){return new Promise(ok=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);
+ const d=x.getImageData(0,0,c.width,c.height),a=d.data;for(let i=0;i<a.length;i+=4){const m=Math.min(a[i],a[i+1],a[i+2]);if(m>228)a[i+3]=0;else if(m>200)a[i+3]=Math.round(a[i+3]*(228-m)/28)}
+ x.putImageData(d,0,0);ok(c.toDataURL('image/png'))};im.onerror=()=>ok(src);im.src=src})}
 function cardBg(src,o){return new Promise(ok=>{const im=new Image();im.onload=()=>{const w=856,h=540,c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');
  x.beginPath();if(x.roundRect)x.roundRect(0,0,w,h,30);else x.rect(0,0,w,h);x.clip();
  const k=Math.max(w/im.width,h/im.height),dw=im.width*k,dh=im.height*k;x.globalAlpha=o;x.drawImage(im,(w-dw)/2,(h-dh)/2,dw,dh);ok(c.toDataURL('image/png'))};im.onerror=()=>ok('');im.src=src})}
 function pdfCards(){
  if(!G.id||!G.tok)return toast('Configure o Gist em Ajustes primeiro');
  if(!window.jspdf)return toast('Biblioteca de PDF não carregou. Verifique a internet.');
- const n=Math.min(200,Math.max(1,+$('#nt').value||10));S.cfg.tables=n;kv.set('cfg',S.cfg);toast('Gerando PDF…');
+ const n=Math.min(200,Math.max(1,+$('#nt').value||10));const ph=$('#fr').value.trim()||'Peça sua música',tg=$('#nm').value=='1';S.cfg.tables=n;S.cfg.phrase=ph;S.cfg.tagm=tg;kv.set('cfg',S.cfg);toast('Gerando PDF…');
  setTimeout(async()=>{
  const T=TH[S.cfg.theme]||TH.neon,pk=S.cfg.pc||T.a;
  const bgd=S.cfg.bg?await cardBg(S.cfg.bg,(S.cfg.bgo==null?30:+S.cfg.bgo)/100):'';
@@ -264,24 +269,22 @@ function pdfCards(){
  if(S.cfg.ig)smalls.push(['Instagram',qrImg(url(S.cfg.ig)),'qig']);
  if(S.cfg.gr)smalls.push(['Avalie no Google',qrImg(S.cfg.gr),'qgr']);
  const nome=doc.splitTextToSize(S.cfg.name||'DJ',50)[0];
- let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),k=Math.min(24/p.width,7/p.height);lg={w:p.width*k,h:p.height*k}}
+ let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),k=Math.min(44/p.width,10.5/p.height);lg={w:p.width*k,h:p.height*k}}
+ const qa=tg?null:qrImg(link(),'L');
+ let fs=10,pl;doc.setFont('helvetica','bold');for(;fs>=6;fs-=.5){doc.setFontSize(fs);pl=doc.splitTextToSize(ph,37);if(pl.length<=3&&41.6+fs*.28+(pl.length-1)*fs*.423<=51.5)break}
  for(let i=1;i<=n;i++){
   const k=(i-1)%8;if(i>1&&k==0)doc.addPage();
   const x=ox+(k%2)*(W+gx),y=oy+Math.floor(k/2)*(H+gy);
   fill(BG);doc.roundedRect(x,y,W,H,3,3,'F');if(bgd)doc.addImage(bgd,'PNG',x,y,W,H,'bgc');doc.setDrawColor(...LN);doc.setLineWidth(.25);doc.roundedRect(x,y,W,H,3,3,'S');
-  if(lg){fill(WH);doc.roundedRect(x+4.5,y+3,lg.w+3,9,2,2,'F');doc.addImage(S.cfg.logo,'PNG',x+6,y+4+(7-lg.h)/2,lg.w,lg.h,'logo')}
+  if(lg){doc.addImage(S.cfg.logo,'PNG',x+4.5,y+3+(10.5-lg.h)/2,lg.w,lg.h,'logo')}
   else{ink(AM);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text(nome,x+4.5,y+8.6)}
-  fill(PK);doc.roundedRect(x+W-26.5,y+4,22,7,3.5,3.5,'F');
-  ink(PT);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('Mesa '+i,x+W-15.5,y+8.8,{align:'center'});
   fill(WH);doc.roundedRect(x+4.5,y+15.5,34,34,2.5,2.5,'F');
-  doc.addImage(qrImg(link(i),'L'),'PNG',x+6.5,y+17.5,30,30);
+  doc.addImage(tg?qrImg(link(i),'L'):qa,'PNG',x+6.5,y+17.5,30,30,tg?undefined:'qmain');
   smalls.forEach((q,j)=>{const bx=x+44+j*19.5;
    fill(WH);doc.roundedRect(bx,y+15.5,17,17,2,2,'F');doc.addImage(q[1],'PNG',bx+1.5,y+17,14,14,q[2]);
    ink(TX);doc.setFont('helvetica','normal');doc.setFontSize(5.5);doc.text(q[0],bx+8.5,y+35.5,{align:'center'})});
-  fill(AM);doc.rect(x+44,y+38.4,10,0.6,'F');
-  ink(TX);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('Peça sua música',x+44,y+43);
-  ink(MU);doc.setFont('helvetica','normal');doc.setFontSize(6.5);
-  doc.text('Aponte a câmera e escolha',x+44,y+46.6);doc.text('a próxima faixa.',x+44,y+49.6);
+  fill(PK);doc.rect(x+44,y+38,10,0.7,'F');
+  ink(TX);doc.setFont('helvetica','bold');doc.setFontSize(fs);doc.text(pl.slice(0,3),x+44,y+41.6+fs*.28,{lineHeightFactor:1.2});
  }
  doc.save('cartoes-mesas.pdf');toast('PDF pronto');
  },60)}
@@ -302,7 +305,7 @@ function viewCfg(){const c=S.cfg;
  <div class="panel"><h2>${ic('palette',20)} Aparência</h2><br><label>Tema (vale para o painel, a tela do convidado e os cartões)</label>
  <div class="ths">${Object.entries(TH).map(([k,T])=>`<button class="th ${(c.theme||'neon')==k?'on':''}" data-a="th" data-v="${k}" style="background:${T.bg};color:${T.t};border-color:${T.a}"><span class="sw" style="background:${T.a}"></span><span class="sw" style="background:${T.b}"></span><b>${T.n}</b></button>`).join('')}</div>
  <label>Cor principal (opcional)</label><div class="row"><input id="f-pc" type="color" value="${c.pc||(TH[c.theme]||TH.neon).a}" style="height:44px;padding:4px"><button class="btn g" data-a="rpc" style="flex:0 0 auto;margin:4px 0 12px">Restaurar</button></div>
- <label>Logomarca (aparece no app e nos cartões em PDF)</label><div class="up">${c.logo?`<span class="chip"><img src="${c.logo}" alt=""></span><button class="sm no" data-a="rlogo">Remover</button>`:''}<input id="f-logo" type="file" accept="image/*"></div>
+ <label>Logomarca (aparece no app e nos cartões em PDF)</label><div class="up">${c.logo?`<span class="chip"><img src="${c.logo}" alt=""></span><button class="sm" data-a="rwhite">Remover fundo branco</button><button class="sm no" data-a="rlogo">Remover</button>`:''}<input id="f-logo" type="file" accept="image/*"></div>
  <label>Plano de fundo (imagem)</label><div class="up">${c.bg?`<img class="bgp" src="${c.bg}" alt=""><button class="sm no" data-a="rbg">Remover</button>`:''}<input id="f-bg" type="file" accept="image/*"></div>${c.bg?`<label>Opacidade da imagem de fundo: <b id="bgov">${c.bgo==null?30:c.bgo}%</b></label><input id="f-bgo" type="range" min="5" max="100" step="5" value="${c.bgo==null?30:c.bgo}"><p style="color:var(--m);font-size:12px">Vale para o sistema e para os cartões em PDF. Valores altos reduzem a leitura dos textos.</p>`:''}</div>
  <div class="panel"><h2>${ic('download',20)} Aplicativo e dados</h2><br><p style="color:var(--m);margin-bottom:12px">Instale para abrir em tela cheia, como um aplicativo, e exporte o histórico de pedidos.</p><div class="row"><button class="btn g" data-a="inst">${ic('download',16)}Instalar aplicativo</button><button class="btn g" data-a="csv">${ic('file',16)}Exportar pedidos (CSV)</button></div></div>`}
 async function mkGist(){G.tok=$('#f-tok').value.trim();if(!G.tok)return toast('Informe o token');
