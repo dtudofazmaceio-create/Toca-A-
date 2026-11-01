@@ -9,14 +9,14 @@
 :root{--bg:#160d28;--p:#221541;--p2:#2e1d56;--l:#3d2a6e;--t:#f6f1ff;--m:#a597c9;--a:#ff4d8d;--b:#ffb938;--ok:#3ddc97;--no:#ff6b6b}
 *{box-sizing:border-box;margin:0}
 body{background:var(--bg);color:var(--t);font:15px/1.45 "Plus Jakarta Sans",system-ui,sans-serif;min-height:100dvh;padding:env(safe-area-inset-top) 0 0}
-button,input,select{font:inherit;color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
 h1,h2,h3{font-weight:800;letter-spacing:-.01em}
 .btn{background:var(--a);border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;color:var(--ap)}
 .btn.g{background:var(--p2);border:1px solid var(--l)}
 .sm{background:var(--p2);border:1px solid var(--l);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:13px}
 .sm.ok{background:var(--ok);color:#06281a;border:0;font-weight:700}.sm.no{color:var(--no)}
-input,select{width:100%;background:var(--bg);border:1px solid var(--l);border-radius:10px;padding:11px 12px;margin:4px 0 12px}
-input:focus,button:focus-visible{outline:2px solid var(--b);outline-offset:1px}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--l);border-radius:10px;padding:11px 12px;margin:4px 0 12px}textarea{resize:vertical}
+input:focus,textarea:focus,button:focus-visible{outline:2px solid var(--b);outline-offset:1px}
 label{font-size:13px;color:var(--m)}
 .shell{display:grid;grid-template-columns:220px 1fr;min-height:100dvh}
 nav{background:var(--p);padding:20px 12px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--l)}
@@ -103,6 +103,13 @@ input[type=range]{padding:0;border:0;background:none;accent-color:var(--a)}
 }
 @media print{body>*{display:none!important}#print{display:grid!important;grid-template-columns:1fr 1fr;gap:12px;background:#fff;color:#000}
  #print div{border:2px solid #000;border-radius:14px;padding:16px;text-align:center;page-break-inside:avoid}#print h2{font-size:26px}#print .qb{padding:0}}
+
+.sty{display:inline-flex;gap:6px;align-items:center;background:var(--p2);border:1px solid var(--l);border-radius:99px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:14px}
+.sty.on{background:var(--a);border-color:var(--a);color:var(--ap)}
+.sty.ro{cursor:default}.sty:disabled{opacity:1}
+.sty.x{padding:6px 8px 6px 12px;font-size:13px}.sty.x button{background:none;border:0;cursor:pointer;color:var(--m);padding:0 2px;display:inline-flex}
+.stys{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.rules{color:var(--m);font-size:13.5px;margin:6px 0 2px;white-space:pre-line}
 </style></head><body>
 <div id="bgl"></div><div id="app"></div><div id="print"></div><div id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -121,11 +128,12 @@ const b64d=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').repl
 const G={tok:'',id:'',et:''};
 async function gh(m,p,b,et){const r=await fetch('https://api.github.com'+p,{method:m,headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+G.tok,...(b?{'Content-Type':'application/json'}:{}),...(et?{'If-None-Match':et}:{})},body:b?JSON.stringify(b):undefined});
  if(r.status==304)return{nm:1};if(!r.ok)throw Error(r.status);return{j:await r.json(),et:r.headers.get('ETag')}}
-function toast(t){const e=$('#toast'),bad=/falha|erro|não |informe|aguarde|configure|digite/i.test(t);e.innerHTML=ic(bad?'x':'okc',16)+'<span>'+esc(t)+'</span>';e.style.display='flex';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2600)}
+function toast(t){const e=$('#toast'),bad=/falha|erro|não |informe|aguarde|configure|digite|escolha|limite/i.test(t);e.innerHTML=ic(bad?'x':'okc',16)+'<span>'+esc(t)+'</span>';e.style.display='flex';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2600)}
 function qr(el,text,n=140){el.innerHTML='';new QRCode(el,{text,width:n,height:n,correctLevel:QRCode.CorrectLevel.M})}
 const url=s=>!s?'':/^https?:/i.test(s)?s:'https://instagram.com/'+s.replace(/^@/,'');
 const ago=ts=>{const m=Math.round((Date.now()-ts)/6e4);return m<1?'agora':m<60?m+' min':Math.floor(m/60)+'h'};
 const LB={new:'Enviado',queue:'Na fila',played:'Tocou!',rejected:'Não rolou'};
+const SUG=['Sertanejo','Pagode','Funk','Pop','Rock','MPB','Forró','Eletrônica','Axé','Samba','Reggae','Flashback','Hip Hop','Gospel','Internacional'];
 
 /* ---------- Ícones (SVG vetorial) ---------- */
 const IC={
@@ -170,7 +178,9 @@ const h2r=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
 const lum=h=>{const[r,g,b]=h2r(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
 const on=h=>lum(h)>.3?'#14101f':'#ffffff';
 const rgba=(h,a)=>`rgba(${h2r(h).join(',')},${a})`;
-const clean=c=>({...c,ig:safeU(c.ig),gr:safeU(c.gr),logo:safeI(c.logo),bg:safeI(c.bg),theme:TH[c.theme]?c.theme:'neon',pc:/^#[0-9a-f]{6}$/i.test(c.pc||'')?c.pc:'',bgo:c.bgo==null?30:Math.min(100,Math.max(0,+c.bgo||0)),ls:Math.min(250,Math.max(50,+c.ls||100))});
+const SC=(v,n)=>String(v==null?'':v).slice(0,n);
+const cleanSty=a=>(Array.isArray(a)?a:[]).map(x=>SC(x,24).trim()).filter(Boolean).filter((x,i,r)=>r.findIndex(y=>y.toLowerCase()==x.toLowerCase())==i).slice(0,16);
+const clean=c=>({...c,ig:safeU(c.ig),gr:safeU(c.gr),logo:safeI(c.logo),bg:safeI(c.bg),theme:TH[c.theme]?c.theme:'neon',pc:/^#[0-9a-f]{6}$/i.test(c.pc||'')?c.pc:'',bgo:c.bgo==null?30:Math.min(100,Math.max(0,+c.bgo||0)),ls:Math.min(250,Math.max(50,+c.ls||100)),styles:cleanSty(c.styles),rules:SC(c.rules,240),maxp:Math.min(20,Math.max(0,Math.floor(+c.maxp||0)))});
 function applyTheme(c){const T=TH[c.theme]||TH.neon,r=document.documentElement.style,a=c.pc||T.a;
  const V={bg:T.bg,p:T.p,p2:T.p2,l:T.l,t:T.t,m:T.m,a,b:T.b,ok:T.ok||'#3ddc97',no:T.no||'#ff6b6b',ap:on(a),ab:on(T.b)};
  for(const k in V)r.setProperty('--'+k,V[k]);r.setProperty('--ls',Math.min(250,Math.max(50,+c.ls||100))/100);
@@ -190,7 +200,7 @@ function djApp(){applyTheme(S.cfg);
  $('#app').innerHTML=`<div class="shell"><nav><div class="brand"><span id="bl"></span><b>${esc(S.cfg.name||'Pedidos do DJ')}</b><i id="dot"></i></div>
  <a data-s="req">${ic('headphones',20)}<span>Pedidos</span><em id="bd"></em></a><a data-s="qr">${ic('qr',20)}<span>QR Codes</span></a><a data-s="cfg">${ic('sliders',20)}<span>Ajustes</span></a></nav><main id="main"></main></div>`;
  $$('nav a').forEach(a=>a.onclick=()=>go(a.dataset.s));
- $('#main').onclick=onAct;$('#main').onchange=onChg;$('#main').oninput=e=>{if(e.target.id=='f-bgo'){S.cfg.bgo=+e.target.value;$('#bgov').textContent=e.target.value+'%';applyTheme(S.cfg)}else if(e.target.id=='f-ls'){S.cfg.ls=+e.target.value;$('#lsv').textContent=e.target.value+'%';applyTheme(S.cfg)}};setBrand();
+ $('#main').onclick=onAct;$('#main').onchange=onChg;$('#main').onkeydown=e=>{if(e.key=='Enter'&&e.target.id=='f-sty'){e.preventDefault();addSty(e.target.value)}};$('#main').oninput=e=>{if(e.target.id=='f-bgo'){S.cfg.bgo=+e.target.value;$('#bgov').textContent=e.target.value+'%';applyTheme(S.cfg)}else if(e.target.id=='f-ls'){S.cfg.ls=+e.target.value;$('#lsv').textContent=e.target.value+'%';applyTheme(S.cfg)}};setBrand();
  go(S.cfg.tok&&S.cfg.gid?'req':'cfg');
  setInterval(sync,5000);sync();
 }
@@ -203,27 +213,30 @@ function card(r,cnt,first){const c=colOf(r),n=cnt[key(r)];
  :B('new','undo','Reabrir')+B('del','trash','Apagar','no');
  return `<div class="card s-${esc(r.status)} ${S.fresh.has(r.id)?'fresh':''}"><div class="ct"><h4>${esc(r.song)}</h4>${n>1&&c!='done'?`<span class="tag">×${n}</span>`:''}${first?'<span class="tag nx">Próxima</span>':''}</div>
  <p class="ar">${esc(r.artist||'Artista não informado')}</p>
- <div class="meta"><span>${ic('user',13)}${esc(r.name||'Anônimo')}</span>${r.table?`<span>${ic('pin',13)}Mesa ${esc(r.table)}</span>`:''}<span>${ic('clock',13)}${ago(r.ts)}</span>${c=='done'?`<span class="st ${esc(r.status)}">${esc(LB[r.status]||'')}</span>`:''}</div>
+ <div class="meta"><span>${ic('user',13)}${esc(r.name||'Anônimo')}</span>${r.style?`<span>${ic('music',13)}${esc(r.style)}</span>`:''}${r.table?`<span>${ic('pin',13)}Mesa ${esc(r.table)}</span>`:''}<span>${ic('clock',13)}${ago(r.ts)}</span>${c=='done'?`<span class="st ${esc(r.status)}">${esc(LB[r.status]||'')}</span>`:''}</div>
  <div class="act">${b}<a class="sm" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(r.song+' '+r.artist)}" style="text-decoration:none;color:inherit" title="Buscar no YouTube">${ic('search',15)}<span>Buscar</span></a></div></div>`}
 
 function viewReq(){
  if(S.sec!='req')return;
  if(!$('#lists')){$('#main').innerHTML=`<div class="top"><div class="srch">${ic('search',17)}<input id="q" placeholder="Buscar música, artista ou nome" autocomplete="off"></div><button class="ib" id="bo" data-a="open"></button><button class="ib" id="bm" data-a="mute"></button><button class="ib" data-a="notif" title="Ativar notificações">${ic('bell',17)}</button></div><div class="stats" id="stats"></div><div id="lists"></div>`;
   $('#q').value=S.q||'';$('#q').oninput=e=>{S.q=e.target.value;viewReq()}}
- const all=L(),q=(S.q||'').toLowerCase().trim(),f=q?all.filter(r=>(r.song+' '+r.artist+' '+r.name).toLowerCase().includes(q)):all.slice();
+ const all=L(),q=(S.q||'').toLowerCase().trim(),f=q?all.filter(r=>(r.song+' '+r.artist+' '+r.name+' '+(r.style||'')).toLowerCase().includes(q)):all.slice();
  const c={new:[],queue:[],done:[]},cnt={};
  all.forEach(r=>{if(r.status=='new'||r.status=='queue')cnt[key(r)]=(cnt[key(r)]||0)+1});
- f.sort((a,b)=>a.ts-b.ts).forEach(r=>c[colOf(r)].push(r));c.done.reverse();
+ const sty=S.cfg.styles||[];if(S.sf&&!sty.includes(S.sf))S.sf='';
+ f.filter(r=>!S.sf||r.style==S.sf).sort((a,b)=>a.ts-b.ts).forEach(r=>c[colOf(r)].push(r));c.done.reverse();
+ const act=all.filter(r=>r.status=='new'||r.status=='queue');
+ const sbar=sty.length?`<div class="stys" style="margin-top:0"><button class="sty ${S.sf?'':'on'}" data-a="sf" data-v="">Todos ${act.length}</button>${sty.map(s=>`<button class="sty ${S.sf==s?'on':''}" data-a="sf" data-v="${esc(s)}">${esc(s)} ${act.filter(r=>r.style==s).length}</button>`).join('')}</div>`:'';
  const nw=all.filter(r=>r.status=='new').length,op=S.cfg.open!==false;
  $('#bd').textContent=nw||'';document.title=(nw?`(${nw}) `:'')+'Pedidos do DJ';
  $('#bo').className='ib '+(op?'on':'off');$('#bo').innerHTML=ic(op?'unlock':'lock',17)+(op?'Pedidos abertos':'Pedidos fechados');
  $('#bm').innerHTML=ic(S.cfg.mute?'volx':'vol',17);$('#bm').title=S.cfg.mute?'Som desligado':'Som ligado';
  $('#stats').innerHTML=[['inbox','Novos',nw],['list','Na fila',all.filter(r=>r.status=='queue').length],['okc','Tocadas',all.filter(r=>r.status=='played').length],['music','Total',all.length]].map(t=>`<div class="stat">${ic(t[0],22)}<div><b>${t[2]}</b><small>${t[1]}</small></div></div>`).join('');
- $('#lists').innerHTML=`<div class="tabs">${Object.keys(COLS).map(k=>`<button data-t="${k}" class="${S.tab==k?'on':''}">${COLS[k]} ${c[k].length}</button>`).join('')}</div>
+ $('#lists').innerHTML=`${sbar}<div class="tabs">${Object.keys(COLS).map(k=>`<button data-t="${k}" class="${S.tab==k?'on':''}">${COLS[k]} ${c[k].length}</button>`).join('')}</div>
  <div class="cols">${Object.keys(COLS).map(k=>`<section class="${S.tab==k?'on':''}"><h3>${COLS[k]}<b>${c[k].length}</b>${k=='done'&&c.done.length?`<button class="sm" data-a="clr">${ic('trash',14)}Limpar</button>`:''}</h3>${c[k].map((r,i)=>card(r,cnt,k=='queue'&&i==0)).join('')||`<div class="empty">${ic('inbox',26)}<br>Nada por aqui ainda</div>`}</section>`).join('')}</div>`;
 }
 function exportCsv(){const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
- const rows=[['Data','Música','Artista','Nome','Mesa','Situação'],...L().sort((a,b)=>a.ts-b.ts).map(r=>[new Date(r.ts).toLocaleString('pt-BR'),r.song,r.artist,r.name,r.table,LB[r.status]||r.status])];
+ const rows=[['Data','Música','Artista','Estilo','Nome','Mesa','Situação'],...L().sort((a,b)=>a.ts-b.ts).map(r=>[new Date(r.ts).toLocaleString('pt-BR'),r.song,r.artist,r.style,r.name,r.table,LB[r.status]||r.status])];
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+rows.map(r=>r.map(q).join(';')).join('\n')],{type:'text/csv'}));a.download='pedidos.csv';a.click()}
 function onAct(e){const t=e.target.closest('button');if(!t)return;
  if(t.dataset.t){S.tab=t.dataset.t;return viewReq()}
@@ -231,6 +244,7 @@ function onAct(e){const t=e.target.closest('button');if(!t)return;
  if(a=='clr'){L().filter(r=>colOf(r)=='done').forEach(r=>mark(r,'del'))}
  else if(a=='notif'){Notification.requestPermission().then(()=>{beep();toast('Alertas ativados')})}
  else if(a=='th'){readForm();S.cfg.theme=t.dataset.v;S.cfg.pc='';changed()}else if(a=='rpc'){readForm();S.cfg.pc='';changed()}else if(a=='rwhite'){readForm();cutWhite(S.cfg.logo).then(d=>{S.cfg.logo=d;changed()})}else if(a=='rlogo'){readForm();S.cfg.logo='';changed()}else if(a=='rbg'){readForm();S.cfg.bg='';changed()}else if(a=='save')saveCfg();else if(a=='mk')mkGist();else if(a=='open'){S.cfg.open=S.cfg.open===false;kv.set('cfg',S.cfg);if(G.id&&G.tok)pushCfg().then(()=>toast(S.cfg.open?'Pedidos abertos':'Pedidos fechados')).catch(()=>toast('Falha ao publicar'))}else if(a=='mute'){S.cfg.mute=!S.cfg.mute;kv.set('cfg',S.cfg)}else if(a=='csv')exportCsv();else if(a=='inst'){if(ipr)ipr.prompt();else toast('No iPhone: Compartilhar > Adicionar à Tela de Início')}else if(a=='pdf')pdfCards();
+ else if(a=='sty+'){addSty(t.dataset.v!==undefined?t.dataset.v:$('#f-sty').value)}else if(a=='sty-'){readForm();(S.cfg.styles||[]).splice(+t.dataset.i,1);changed('Estilos publicados')}else if(a=='sf'){S.sf=t.dataset.v||''}else if(a=='bk')exportBackup();else if(a=='imp')$('#f-imp').click();
  else if(a=='copy'){navigator.clipboard.writeText(link()).then(()=>toast('Link copiado'))}
  else{const r=S.reqs.find(x=>x.id==t.dataset.id);if(r)mark(r,a)}
  viewReq()}
@@ -307,26 +321,67 @@ function viewCfg(){const c=S.cfg;
  <label>Link de avaliação do Google</label><input id="f-gr" value="${esc(c.gr)}" placeholder="https://g.page/r/.../review">
  <label>Pedidos</label><select id="f-open"><option value="1" ${c.open!==false?'selected':''}>Abertos</option><option value="0" ${c.open===false?'selected':''}>Fechados</option></select>
  <div class="row"><button class="btn" data-a="save">${ic('check',16)}Salvar e sincronizar</button><button class="btn g" data-a="notif">${ic('bell',16)}Ativar alertas</button></div></div>
+ <div class="panel"><h2>${ic('music',20)} Estilos musicais do evento</h2><p style="color:var(--m);margin:6px 0 10px">Combine com o contratante os estilos que vão tocar. O convidado vê esta lista ao abrir o link e precisa escolher um deles ao pedir uma música.</p>
+ <div class="stys">${(c.styles||[]).map((s,i)=>`<span class="sty x ro">${esc(s)}<button data-a="sty-" data-i="${i}" title="Remover" aria-label="Remover ${esc(s)}">${ic('x',14)}</button></span>`).join('')||'<span style="color:var(--m)">Nenhum estilo definido: o convidado pode pedir qualquer música.</span>'}</div>
+ <label>Adicionar estilo (separe vários por vírgula)</label><div class="row"><input id="f-sty" maxlength="80" placeholder="Ex.: Sertanejo, Pagode" autocomplete="off"><button class="btn g" data-a="sty+" style="flex:0 0 auto;margin-bottom:12px">${ic('check',16)}Adicionar</button></div>
+ <div class="stys" style="margin-top:0">${SUG.filter(x=>!(c.styles||[]).some(y=>y.toLowerCase()==x.toLowerCase())).map(x=>`<button class="sty" data-a="sty+" data-v="${x}">+ ${x}</button>`).join('')}</div>
+ <label>Aviso aos convidados (opcional)</label><textarea id="f-rules" rows="2" maxlength="240" placeholder="Ex.: O contratante escolheu estes estilos. Pedidos fora deles não serão tocados.">${esc(c.rules)}</textarea>
+ <label>Limite de pedidos por convidado (0 = sem limite)</label><input id="f-maxp" type="number" min="0" max="20" value="${c.maxp||0}">
+ <button class="btn" data-a="save">${ic('check',16)}Salvar e sincronizar</button></div>
  <div class="panel"><h2>${ic('palette',20)} Aparência</h2><br><label>Tema (vale para o painel, a tela do convidado e os cartões)</label>
  <div class="ths">${Object.entries(TH).map(([k,T])=>`<button class="th ${(c.theme||'neon')==k?'on':''}" data-a="th" data-v="${k}" style="background:${T.bg};color:${T.t};border-color:${T.a}"><span class="sw" style="background:${T.a}"></span><span class="sw" style="background:${T.b}"></span><b>${T.n}</b></button>`).join('')}</div>
  <label>Cor principal (opcional)</label><div class="row"><input id="f-pc" type="color" value="${c.pc||(TH[c.theme]||TH.neon).a}" style="height:44px;padding:4px"><button class="btn g" data-a="rpc" style="flex:0 0 auto;margin:4px 0 12px">Restaurar</button></div>
  <label>Logomarca (aparece no app e nos cartões em PDF)</label><div class="up">${c.logo?`<span class="chip"><img src="${c.logo}" alt=""></span><button class="sm" data-a="rwhite">Remover fundo branco</button><button class="sm no" data-a="rlogo">Remover</button>`:''}<input id="f-logo" type="file" accept="image/*"></div>${c.logo?`<label>Tamanho da logomarca: <b id="lsv">${c.ls||100}%</b></label><input id="f-ls" type="range" min="50" max="250" step="10" value="${c.ls||100}"><p style="color:var(--m);font-size:12px">Vale para o sistema, a tela do convidado e os cartões em PDF. No cartão, a logo cresce até um limite e o QR Code se ajusta para caber.</p>`:''}
  <label>Plano de fundo (imagem)</label><div class="up">${c.bg?`<img class="bgp" src="${c.bg}" alt=""><button class="sm no" data-a="rbg">Remover</button>`:''}<input id="f-bg" type="file" accept="image/*"></div>${c.bg?`<label>Opacidade da imagem de fundo: <b id="bgov">${c.bgo==null?30:c.bgo}%</b></label><input id="f-bgo" type="range" min="5" max="100" step="5" value="${c.bgo==null?30:c.bgo}"><p style="color:var(--m);font-size:12px">Vale para o sistema e para os cartões em PDF. Valores altos reduzem a leitura dos textos.</p>`:''}</div>
- <div class="panel"><h2>${ic('download',20)} Aplicativo e dados</h2><br><p style="color:var(--m);margin-bottom:12px">Instale para abrir em tela cheia, como um aplicativo, e exporte o histórico de pedidos.</p><div class="row"><button class="btn g" data-a="inst">${ic('download',16)}Instalar aplicativo</button><button class="btn g" data-a="csv">${ic('file',16)}Exportar pedidos (CSV)</button></div></div>`}
+ <div class="panel"><h2>${ic('download',20)} Aplicativo e dados</h2><br><p style="color:var(--m);margin-bottom:12px">Instale para abrir em tela cheia, como um aplicativo, e exporte o histórico de pedidos.</p><div class="row"><button class="btn g" data-a="inst">${ic('download',16)}Instalar aplicativo</button><button class="btn g" data-a="csv">${ic('file',16)}Exportar pedidos (CSV)</button></div></div>
+ <div class="panel"><h2>${ic('cloud',20)} Backup global</h2><p style="color:var(--m);margin:6px 0 10px">Exporte e importe tudo em um único arquivo: token e ID do Gist, links do Instagram e da avaliação do Google, nome, frase, tema, logo, fundo, estilos musicais, aviso, limite de pedidos e configurações dos cartões.</p>
+ <div class="note">O arquivo contém o seu token do GitHub em texto aberto. Guarde em local seguro e não envie a ninguém.</div>
+ <label style="display:flex;align-items:center"><input id="bk-req" type="checkbox" checked style="width:auto;margin:0 8px 0 0;padding:0">Incluir os pedidos recebidos</label>
+ <div class="row" style="margin-top:12px"><button class="btn g" data-a="bk">${ic('download',16)}Exportar backup</button><button class="btn g" data-a="imp">${ic('file',16)}Importar backup</button></div>
+ <input id="f-imp" type="file" accept=".json,application/json" style="display:none"></div>`}
+function addSty(v){readForm();const a=S.cfg.styles=S.cfg.styles||[];
+ String(v||'').split(/[,;\n]/).map(x=>x.trim().slice(0,24)).filter(Boolean).forEach(x=>{if(a.length<16&&!a.some(y=>y.toLowerCase()==x.toLowerCase()))a.push(x)});
+ changed('Estilos publicados')}
+function exportBackup(){readForm();const inc=!$('#bk-req')||$('#bk-req').checked;
+ const d={app:'pedidos-dj',v:1,date:new Date().toISOString(),cfg:{...S.cfg},reqs:inc?L().map(({dirty,...o})=>o):[]};
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));
+ a.download='backup-pedidos-dj-'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('Backup exportado')}
+function sanCfg(d){const hd=v=>/^@?[A-Za-z0-9._]{1,40}$/.test(v||'')?v:'';
+ return{tok:/^[A-Za-z0-9_]{0,255}$/.test(d.tok||'')?(d.tok||''):'',gid:/^[A-Za-z0-9]{0,64}$/.test(d.gid||'')?(d.gid||''):'',
+  name:SC(d.name,60),ev:SC(d.ev,80),tag:SC(d.tag,120),ig:safeU(d.ig)||hd(d.ig),gr:safeU(d.gr),
+  open:d.open!==false,mute:!!d.mute,theme:TH[d.theme]?d.theme:'neon',pc:/^#[0-9a-f]{6}$/i.test(d.pc||'')?d.pc:'',
+  logo:safeI(d.logo),ls:Math.min(250,Math.max(50,+d.ls||100)),bg:safeI(d.bg),bgo:d.bgo==null?30:Math.min(100,Math.max(0,+d.bgo||0)),
+  phrase:SC(d.phrase,70),tables:Math.min(200,Math.max(1,+d.tables||10)),tagm:d.tagm!==false,
+  styles:cleanSty(d.styles),rules:SC(d.rules,240),maxp:Math.min(20,Math.max(0,Math.floor(+d.maxp||0)))}}
+async function importBackup(f){let d;
+ try{d=JSON.parse(await f.text())}catch{return toast('Erro: arquivo de backup inválido')}
+ if(!d||d.app!='pedidos-dj'||!d.cfg||typeof d.cfg!='object')return toast('Erro: este arquivo não é um backup do sistema');
+ if(!confirm('Importar o backup substitui as configurações deste aparelho (token, links, logo, estilos...). Continuar?'))return;
+ try{S.cfg=sanCfg(d.cfg);await kv.set('cfg',S.cfg);G.tok=S.cfg.tok;G.id=S.cfg.gid;G.et='';
+  const rq=(Array.isArray(d.reqs)?d.reqs:[]).filter(r=>r&&/^r_[A-Za-z0-9]{1,40}$/.test(r.id||'')&&String(r.song||'').trim()).slice(0,2000);
+  let n=0;for(const r of rq){if(S.reqs.some(x=>x.id==r.id))continue;
+   const o={id:r.id,song:SC(r.song,80),artist:SC(r.artist,60),name:SC(r.name,30),table:SC(r.table,6),style:SC(r.style,24),ts:+r.ts||Date.now(),status:['new','queue','played','rejected'].includes(r.status)?r.status:'new',dirty:1};
+   S.reqs.push(o);await R.put(o);n++}
+  applyTheme(S.cfg);setBrand();go('cfg');
+  toast('Backup importado'+(n?' ('+n+' pedidos)':''));
+  if(G.id&&G.tok)pushCfg().then(()=>sync()).catch(()=>toast('Falha ao publicar no Gist'))}
+ catch{toast('Erro ao importar o backup')}}
 async function mkGist(){G.tok=$('#f-tok').value.trim();if(!G.tok)return toast('Informe o token');
  try{const r=await gh('POST','/gists',{description:'Pedidos do DJ',public:false,files:{'config.json':{content:'{}'}}});$('#f-gid').value=r.j.id;toast('Gist criado — salve')}catch(e){toast('Erro '+e.message+' (token válido?)')}}
 function setBrand(){const b=$('#bl');if(b)b.innerHTML=S.cfg.logo?`<span class="chip"><img src="${S.cfg.logo}" alt=""></span>`:ic('headphones',22);const n=$('.brand b');if(n)n.textContent=S.cfg.name||'Pedidos do DJ'}
 function readForm(){const v=i=>{const e=$('#f-'+i);return e?e.value.trim():undefined};
- const o={tok:v('tok'),gid:v('gid'),name:v('name'),ev:v('ev'),tag:v('tag'),ig:v('ig'),gr:v('gr')},op=v('open');if(op!==undefined)o.open=op=='1';
+ const o={tok:v('tok'),gid:v('gid'),name:v('name'),ev:v('ev'),tag:v('tag'),ig:v('ig'),gr:v('gr'),rules:v('rules')},op=v('open'),mp=v('maxp');if(op!==undefined)o.open=op=='1';if(mp!==undefined)o.maxp=Math.min(20,Math.max(0,Math.floor(+mp||0)));
  for(const k in o)if(o[k]!==undefined)S.cfg[k]=o[k];G.tok=S.cfg.tok||'';G.id=S.cfg.gid||''}
-const pushCfg=()=>{const c=S.cfg;return gh('PATCH','/gists/'+G.id,{files:{'config.json':{content:JSON.stringify({name:c.name,ev:c.ev,tag:c.tag,ig:url(c.ig),gr:c.gr,open:c.open,theme:c.theme,pc:c.pc,logo:c.logo,ls:c.ls,bg:c.bg,bgo:c.bgo})}}})};
+const pushCfg=()=>{const c=S.cfg;return gh('PATCH','/gists/'+G.id,{files:{'config.json':{content:JSON.stringify({name:c.name,ev:c.ev,tag:c.tag,ig:url(c.ig),gr:c.gr,open:c.open,theme:c.theme,pc:c.pc,logo:c.logo,ls:c.ls,bg:c.bg,bgo:c.bgo,styles:c.styles||[],rules:c.rules||'',maxp:c.maxp||0})}}})};
 async function saveCfg(){readForm();G.et='';await kv.set('cfg',S.cfg);if(!G.id||!G.tok)return toast('Informe token e Gist');
  try{await pushCfg();toast('Salvo e sincronizado');setBrand();sync()}catch(e){toast('Falha ao sincronizar ('+e.message+')')}}
-function changed(){kv.set('cfg',S.cfg);applyTheme(S.cfg);setBrand();if(S.sec=='cfg')viewCfg();
- if(G.id&&G.tok)pushCfg().then(()=>toast('Aparência publicada')).catch(()=>toast('Salva neste aparelho; falha ao publicar'))}
+function changed(m){kv.set('cfg',S.cfg);applyTheme(S.cfg);setBrand();if(S.sec=='cfg')viewCfg();
+ if(G.id&&G.tok)pushCfg().then(()=>toast(m||'Aparência publicada')).catch(()=>toast('Salva neste aparelho; falha ao publicar'))}
 async function onChg(e){const i=e.target;try{
  if(i.id=='f-bgo'){readForm();S.cfg.bgo=+i.value;return changed()}
  if(i.id=='f-ls'){readForm();S.cfg.ls=+i.value;return changed()}
+ if(i.id=='f-rules'||i.id=='f-maxp'){readForm();return kv.set('cfg',S.cfg)}
+ if(i.id=='f-imp'){const f=i.files[0];i.value='';if(f)await importBackup(f);return}
  if(i.id=='f-pc'){readForm();S.cfg.pc=i.value;return changed()}
  if(i.id=='f-logo'&&i.files[0]){readForm();S.cfg.logo=await readImg(i.files[0],500,'image/png');return changed()}
  if(i.id=='f-bg'&&i.files[0]){readForm();S.cfg.bg=await readImg(i.files[0],1100,'image/jpeg',.6);return changed()}}catch{toast('Não foi possível ler a imagem')}}
@@ -356,28 +411,34 @@ function alertNew(a){beep();navigator.vibrate&&navigator.vibrate([200,100,200]);
 async function guestApp(P){
  const o=b64d(P.get('g'));G.tok=o.t;G.id=o.i;const mesa=P.get('m')||'';
  let cfg=clean((await kv.get('gcfg'))||{}),mine=(await kv.get('mine'))||[],last='',lt=(await kv.get('last'))||0,ready=!!cfg.name,sending=0;
+ const my=()=>mine.filter(m=>!m.g||m.g==G.id);let sel='';
+ $('#app').addEventListener('click',e=>{const b=e.target.closest('.sty');if(!b||b.disabled)return;sel=b.dataset.v;$$('.sty').forEach(x=>x.classList.toggle('on',x.dataset.v==sel))});
  const SI={new:'clock',queue:'headphones',played:'okc',rejected:'x'};
  const F=(id,lb,i,ml)=>`<label class="fld"><span>${lb}</span><div>${ic(i,17)}<input id="${id}" maxlength="${ml}" autocomplete="off"></div></label>`;
  function draw(){const sig=JSON.stringify([cfg,mine,ready]);if(sig==last)return;last=sig;applyTheme(cfg);
   const open=cfg.open!==false,vals=$$('input').map(i=>i.value);
+  if(!cfg.styles.includes(sel))sel='';
+  const sp=cfg.styles.length?`<div class="panel" style="max-width:none"><h3>${ic('music',20)} Estilos desta festa</h3><p class="rules">${open?'Toque no estilo do seu pedido. Músicas fora destes estilos não serão tocadas.':'Estes são os estilos que vão tocar na festa.'}</p>${cfg.rules?`<p class="rules">${esc(cfg.rules)}</p>`:''}<div class="stys">${cfg.styles.map(x=>`<button class="sty ${open?'':'ro'} ${sel==x?'on':''}" data-v="${esc(x)}" ${open?'':'disabled'}>${esc(x)}</button>`).join('')}</div></div>`:(cfg.rules?`<div class="panel" style="max-width:none"><p class="rules">${esc(cfg.rules)}</p></div>`:'');
   $('#app').innerHTML=`<div class="gw"><div class="hero">${cfg.logo?`<img class="lg" src="${cfg.logo}" alt="">`:''}${cfg.ev?`<div class="ev">${esc(cfg.ev)}</div>`:''}
   ${ready?`<h1>${esc(cfg.name||'DJ')}</h1><p>${esc(cfg.tag||'Escolha a próxima música da pista.')}</p>`:'<div class="sk" style="width:60%;height:34px;margin:8px auto"></div><div class="sk" style="width:80%;height:16px;margin:12px auto"></div>'}
   <div style="margin-top:14px"><span class="badge">${open?'<i class="live"></i>Pedidos abertos':ic('lock',14)+'Pedidos fechados'}</span></div></div>
-  <div class="panel" style="max-width:none">${open?`<h3>${ic('music',20)} Qual música você quer ouvir?</h3><br>${F('s','Música *','music',80)}${F('a','Artista','mic',60)}${F('n','Seu nome','user',30)}${mesa?`<span class="pill">${ic('pin',15)}Mesa ${esc(mesa)}</span>`:F('m','Mesa (opcional)','pin',6)}<button class="btn w" id="send">${ic('send',18)}Enviar pedido</button>`:`<h3>${ic('lock',20)} Pedidos fechados</h3><p style="color:var(--m);margin-top:6px">Volte em breve. O DJ abre os pedidos durante o evento.</p>`}</div>
-  ${mine.length?`<div class="panel" style="max-width:none"><h3>${ic('list',20)} Seus pedidos</h3>${mine.map(m=>`<div class="li"><span><b>${esc(m.song)}</b><br><small style="color:var(--m)">${esc(m.artist)}</small></span><span class="st ${esc(m.status)}">${ic(SI[m.status]||'clock',14)}${esc(LB[m.status]||'')}</span></div>`).join('')}</div>`:''}
+  ${sp}<div class="panel" style="max-width:none">${open?`<h3>${ic('music',20)} Qual música você quer ouvir?</h3><br>${F('s','Música *','music',80)}${F('a','Artista','mic',60)}${F('n','Seu nome','user',30)}${mesa?`<span class="pill">${ic('pin',15)}Mesa ${esc(mesa)}</span>`:F('m','Mesa (opcional)','pin',6)}<button class="btn w" id="send">${ic('send',18)}Enviar pedido</button>`:`<h3>${ic('lock',20)} Pedidos fechados</h3><p style="color:var(--m);margin-top:6px">Volte em breve. O DJ abre os pedidos durante o evento.</p>`}</div>
+  ${my().length?`<div class="panel" style="max-width:none"><h3>${ic('list',20)} Seus pedidos</h3>${my().map(m=>`<div class="li"><span><b>${esc(m.song)}</b><br><small style="color:var(--m)">${esc(m.artist)}</small></span><span class="st ${esc(m.status)}">${ic(SI[m.status]||'clock',14)}${esc(LB[m.status]||'')}</span></div>`).join('')}</div>`:''}
   ${cfg.ig?`<div class="panel gs" style="max-width:none"><div class="qb" id="qi"></div><div><h3>${ic('ig',18)} Me siga</h3><p style="color:var(--m)">Fotos e agenda de eventos</p><br><a class="btn" href="${esc(cfg.ig)}" target="_blank" rel="noopener">${ic('ig',16)}Abrir Instagram</a></div></div>`:''}
   ${cfg.gr?`<div class="panel gs" style="max-width:none"><div class="qb" id="qg"></div><div><h3>${ic('star',18)} Gostou da festa?</h3><p style="color:var(--m)">Sua avaliação ajuda muito</p><br><a class="btn" href="${esc(cfg.gr)}" target="_blank" rel="noopener">${ic('star',16)}Avaliar no Google</a></div></div>`:''}</div>`;
   $$('input').forEach((i,k)=>{if(vals[k])i.value=vals[k]});
   if(cfg.ig)qr($('#qi'),cfg.ig,96);if(cfg.gr)qr($('#qg'),cfg.gr,96);
   const b=$('#send');if(b)b.onclick=send}
  async function send(){const song=$('#s').value.trim();if(!song)return toast('Digite o nome da música');
+  if(cfg.styles.length&&!sel)return toast('Escolha o estilo da música');
+  const lim=+cfg.maxp||0;if(lim&&my().filter(m=>m.status!='rejected').length>=lim)return toast('Limite de '+lim+' pedidos por pessoa atingido');
   if(Date.now()-lt<30000)return toast('Aguarde alguns segundos para pedir outra');
   const id='r_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  const r={id,song:song.slice(0,80),artist:$('#a').value.trim().slice(0,60),name:$('#n').value.trim().slice(0,30),table:mesa||($('#m')?$('#m').value.trim():''),ts:Date.now(),status:'new'};
+  const r={id,song:song.slice(0,80),artist:$('#a').value.trim().slice(0,60),name:$('#n').value.trim().slice(0,30),table:mesa||($('#m')?$('#m').value.trim():''),ts:Date.now(),status:'new',style:sel};
   sending=1;$('#send').disabled=true;
   try{await gh('PATCH','/gists/'+G.id,{files:{[id+'.json']:{content:JSON.stringify(r)}}});
-   mine.unshift({id,song:r.song,artist:r.artist,status:'new'});lt=Date.now();await kv.set('mine',mine);await kv.set('last',lt);
-   navigator.vibrate&&navigator.vibrate(40);$$('input').forEach(i=>i.value='');last='';sending=0;draw();toast('Pedido enviado!')}
+   mine.unshift({id,song:r.song,artist:r.artist,style:r.style,g:G.id,status:'new'});lt=Date.now();await kv.set('mine',mine);await kv.set('last',lt);
+   navigator.vibrate&&navigator.vibrate(40);$$('input').forEach(i=>i.value='');last='';sending=0;sel='';draw();toast('Pedido enviado!')}
   catch{sending=0;toast('Não foi possível enviar. Tente de novo.');$('#send').disabled=false}}
  async function load(){try{const r=await gh('GET','/gists/'+G.id,null,G.et);if(r.nm)return;G.et=r.et;const f=r.j.files;
    if(f['config.json'])cfg=clean(JSON.parse(f['config.json'].content));ready=true;
