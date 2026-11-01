@@ -53,7 +53,7 @@ main{padding:24px;overflow:auto}
 .li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--l)}
 .btn.w{width:100%;padding:14px;font-size:16px}
 a.btn{display:inline-block;text-decoration:none;text-align:center}
-.chip{display:inline-flex}.chip img{height:24px;max-width:90px;object-fit:contain}
+.chip{display:inline-flex}.chip img{height:calc(24px*var(--ls,1));max-width:calc(90px*var(--ls,1));object-fit:contain}
 .ic{flex:none;vertical-align:middle}
 .btn,a.btn{display:inline-flex;gap:8px;align-items:center;justify-content:center}
 .sm{display:inline-flex;gap:5px;align-items:center}
@@ -86,7 +86,7 @@ a.btn{display:inline-block;text-decoration:none;text-align:center}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 input[type=range]{padding:0;border:0;background:none;accent-color:var(--a)}
 #bgl{position:fixed;inset:0;z-index:-1}
-.lg{display:block;margin:0 auto 12px;max-height:84px;max-width:70%;object-fit:contain}
+.lg{display:block;margin:0 auto 12px;max-height:calc(84px*var(--ls,1));max-width:min(100%,calc(70%*var(--ls,1)));object-fit:contain}
 .ths{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:6px 0 16px}
 .th{border:2px solid;border-radius:12px;padding:12px;cursor:pointer;display:flex;gap:6px;align-items:center;font-family:inherit}.th.on{box-shadow:0 0 0 3px var(--t)}
 .sw{width:16px;height:16px;border-radius:50%;display:inline-block}
@@ -170,10 +170,10 @@ const h2r=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
 const lum=h=>{const[r,g,b]=h2r(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
 const on=h=>lum(h)>.3?'#14101f':'#ffffff';
 const rgba=(h,a)=>`rgba(${h2r(h).join(',')},${a})`;
-const clean=c=>({...c,ig:safeU(c.ig),gr:safeU(c.gr),logo:safeI(c.logo),bg:safeI(c.bg),theme:TH[c.theme]?c.theme:'neon',pc:/^#[0-9a-f]{6}$/i.test(c.pc||'')?c.pc:'',bgo:c.bgo==null?30:Math.min(100,Math.max(0,+c.bgo||0))});
+const clean=c=>({...c,ig:safeU(c.ig),gr:safeU(c.gr),logo:safeI(c.logo),bg:safeI(c.bg),theme:TH[c.theme]?c.theme:'neon',pc:/^#[0-9a-f]{6}$/i.test(c.pc||'')?c.pc:'',bgo:c.bgo==null?30:Math.min(100,Math.max(0,+c.bgo||0)),ls:Math.min(250,Math.max(50,+c.ls||100))});
 function applyTheme(c){const T=TH[c.theme]||TH.neon,r=document.documentElement.style,a=c.pc||T.a;
  const V={bg:T.bg,p:T.p,p2:T.p2,l:T.l,t:T.t,m:T.m,a,b:T.b,ok:T.ok||'#3ddc97',no:T.no||'#ff6b6b',ap:on(a),ab:on(T.b)};
- for(const k in V)r.setProperty('--'+k,V[k]);
+ for(const k in V)r.setProperty('--'+k,V[k]);r.setProperty('--ls',Math.min(250,Math.max(50,+c.ls||100))/100);
  $('meta[name=theme-color]').content=T.bg;const o=(c.bgo==null?30:+c.bgo)/100;
  $('#bgl').style.background=c.bg?`linear-gradient(${rgba(T.bg,1-o)},${rgba(T.bg,1-o)}),url(${c.bg}) center/cover`:''}
 function readImg(f,max,type,q){return new Promise((ok,er)=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);const x=c.getContext('2d');if(type=='image/jpeg'){x.fillStyle='#000';x.fillRect(0,0,c.width,c.height)}x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL(type,q))};im.onerror=()=>er(Error('img'));im.src=u})}
@@ -190,7 +190,7 @@ function djApp(){applyTheme(S.cfg);
  $('#app').innerHTML=`<div class="shell"><nav><div class="brand"><span id="bl"></span><b>${esc(S.cfg.name||'Pedidos do DJ')}</b><i id="dot"></i></div>
  <a data-s="req">${ic('headphones',20)}<span>Pedidos</span><em id="bd"></em></a><a data-s="qr">${ic('qr',20)}<span>QR Codes</span></a><a data-s="cfg">${ic('sliders',20)}<span>Ajustes</span></a></nav><main id="main"></main></div>`;
  $$('nav a').forEach(a=>a.onclick=()=>go(a.dataset.s));
- $('#main').onclick=onAct;$('#main').onchange=onChg;$('#main').oninput=e=>{if(e.target.id=='f-bgo'){S.cfg.bgo=+e.target.value;$('#bgov').textContent=e.target.value+'%';applyTheme(S.cfg)}};setBrand();
+ $('#main').onclick=onAct;$('#main').onchange=onChg;$('#main').oninput=e=>{if(e.target.id=='f-bgo'){S.cfg.bgo=+e.target.value;$('#bgov').textContent=e.target.value+'%';applyTheme(S.cfg)}else if(e.target.id=='f-ls'){S.cfg.ls=+e.target.value;$('#lsv').textContent=e.target.value+'%';applyTheme(S.cfg)}};setBrand();
  go(S.cfg.tok&&S.cfg.gid?'req':'cfg');
  setInterval(sync,5000);sync();
 }
@@ -269,7 +269,8 @@ function pdfCards(){
  if(S.cfg.ig)smalls.push(['Instagram',qrImg(url(S.cfg.ig)),'qig']);
  if(S.cfg.gr)smalls.push(['Avalie no Google',qrImg(S.cfg.gr),'qgr']);
  const nome=doc.splitTextToSize(S.cfg.name||'DJ',37)[0];
- let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),k=Math.min(32/p.width,10.5/p.height);lg={w:p.width*k,h:p.height*k}}
+ let lg=null;if(S.cfg.logo){const p=doc.getImageProperties(S.cfg.logo),sc=(+S.cfg.ls||100)/100,k=Math.min(Math.min(32/p.width,10.5/p.height)*sc,46/p.width,18/p.height);lg={w:p.width*k,h:p.height*k}}
+ const hh=lg?Math.max(10.5,lg.h):10.5,bt=5+hh,f=(49.5-bt)/34;
  const qa=tg?null:qrImg(link(),'L');
  const ax=lg?4.5+lg.w+4:4.5,pw=W-4.5-ax,pc=ax+pw/2;
  let fs=13,pl=null;doc.setFont('helvetica','bold');
@@ -279,16 +280,16 @@ function pdfCards(){
   const k=(i-1)%8;if(i>1&&k==0)doc.addPage();
   const x=ox+(k%2)*(W+gx),y=oy+Math.floor(k/2)*(H+gy);
   fill(BG);doc.roundedRect(x,y,W,H,3,3,'F');if(bgd)doc.addImage(bgd,'PNG',x,y,W,H,'bgc');doc.setDrawColor(...LN);doc.setLineWidth(.25);doc.roundedRect(x,y,W,H,3,3,'S');
-  if(lg){doc.addImage(S.cfg.logo,'PNG',x+4.5,y+3+(10.5-lg.h)/2,lg.w,lg.h,'logo')}
+  if(lg){doc.addImage(S.cfg.logo,'PNG',x+4.5,y+3+(hh-lg.h)/2,lg.w,lg.h,'logo')}
   else{ink(AM);doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.text(nome,x+62.5,y+46,{align:'center'})}
-  fill(WH);doc.roundedRect(x+4.5,y+15.5,34,34,2.5,2.5,'F');
-  doc.addImage(tg?qrImg(link(i),'L'):qa,'PNG',x+6.5,y+17.5,30,30,tg?undefined:'qmain');
-  smalls.forEach((q,j)=>{const bx=x+44+j*19.5;
-   fill(WH);doc.roundedRect(bx,y+15.5,17,17,2,2,'F');doc.addImage(q[1],'PNG',bx+1.5,y+17,14,14,q[2]);
-   ink(TX);doc.setFont('helvetica','normal');doc.setFontSize(5.5);doc.text(q[0],bx+8.5,y+35.5,{align:'center'})});
+  fill(WH);doc.roundedRect(x+4.5,y+bt,34*f,34*f,2.5,2.5,'F');
+  doc.addImage(tg?qrImg(link(i),'L'):qa,'PNG',x+4.5+2*f,y+bt+2*f,30*f,30*f,tg?undefined:'qmain');
+  smalls.forEach((q,j)=>{const bx=x+4.5+34*f+5.5+j*(17*f+2.5);
+   fill(WH);doc.roundedRect(bx,y+bt,17*f,17*f,2,2,'F');doc.addImage(q[1],'PNG',bx+1.5*f,y+bt+1.5*f,14*f,14*f,q[2]);
+   ink(TX);doc.setFont('helvetica','normal');doc.setFontSize(5.5);doc.text(q[0],bx+8.5*f,y+bt+17*f+3,{align:'center'})});
   if(pl){const n2=Math.min(2,pl.length);ink(TX);doc.setFont('helvetica','bold');doc.setFontSize(fs);
-   doc.text(pl.slice(0,2),x+pc,y+8.5-(n2-1)*fs*.423/2+fs*.12,{align:'center',lineHeightFactor:1.2});
-   fill(PK);doc.rect(x+pc-6,y+13.4,12,0.6,'F')}
+   doc.text(pl.slice(0,2),x+pc,y+8.5+(hh-10.5)/2-(n2-1)*fs*.423/2+fs*.12,{align:'center',lineHeightFactor:1.2});
+   fill(PK);doc.rect(x+pc-6,y+13.4+(hh-10.5),12,0.6,'F')}
  }
  doc.save('cartoes-mesas.pdf');toast('PDF pronto');
  },60)}
@@ -309,7 +310,7 @@ function viewCfg(){const c=S.cfg;
  <div class="panel"><h2>${ic('palette',20)} Aparência</h2><br><label>Tema (vale para o painel, a tela do convidado e os cartões)</label>
  <div class="ths">${Object.entries(TH).map(([k,T])=>`<button class="th ${(c.theme||'neon')==k?'on':''}" data-a="th" data-v="${k}" style="background:${T.bg};color:${T.t};border-color:${T.a}"><span class="sw" style="background:${T.a}"></span><span class="sw" style="background:${T.b}"></span><b>${T.n}</b></button>`).join('')}</div>
  <label>Cor principal (opcional)</label><div class="row"><input id="f-pc" type="color" value="${c.pc||(TH[c.theme]||TH.neon).a}" style="height:44px;padding:4px"><button class="btn g" data-a="rpc" style="flex:0 0 auto;margin:4px 0 12px">Restaurar</button></div>
- <label>Logomarca (aparece no app e nos cartões em PDF)</label><div class="up">${c.logo?`<span class="chip"><img src="${c.logo}" alt=""></span><button class="sm" data-a="rwhite">Remover fundo branco</button><button class="sm no" data-a="rlogo">Remover</button>`:''}<input id="f-logo" type="file" accept="image/*"></div>
+ <label>Logomarca (aparece no app e nos cartões em PDF)</label><div class="up">${c.logo?`<span class="chip"><img src="${c.logo}" alt=""></span><button class="sm" data-a="rwhite">Remover fundo branco</button><button class="sm no" data-a="rlogo">Remover</button>`:''}<input id="f-logo" type="file" accept="image/*"></div>${c.logo?`<label>Tamanho da logomarca: <b id="lsv">${c.ls||100}%</b></label><input id="f-ls" type="range" min="50" max="250" step="10" value="${c.ls||100}"><p style="color:var(--m);font-size:12px">Vale para o sistema, a tela do convidado e os cartões em PDF. No cartão, a logo cresce até um limite e o QR Code se ajusta para caber.</p>`:''}
  <label>Plano de fundo (imagem)</label><div class="up">${c.bg?`<img class="bgp" src="${c.bg}" alt=""><button class="sm no" data-a="rbg">Remover</button>`:''}<input id="f-bg" type="file" accept="image/*"></div>${c.bg?`<label>Opacidade da imagem de fundo: <b id="bgov">${c.bgo==null?30:c.bgo}%</b></label><input id="f-bgo" type="range" min="5" max="100" step="5" value="${c.bgo==null?30:c.bgo}"><p style="color:var(--m);font-size:12px">Vale para o sistema e para os cartões em PDF. Valores altos reduzem a leitura dos textos.</p>`:''}</div>
  <div class="panel"><h2>${ic('download',20)} Aplicativo e dados</h2><br><p style="color:var(--m);margin-bottom:12px">Instale para abrir em tela cheia, como um aplicativo, e exporte o histórico de pedidos.</p><div class="row"><button class="btn g" data-a="inst">${ic('download',16)}Instalar aplicativo</button><button class="btn g" data-a="csv">${ic('file',16)}Exportar pedidos (CSV)</button></div></div>`}
 async function mkGist(){G.tok=$('#f-tok').value.trim();if(!G.tok)return toast('Informe o token');
@@ -318,15 +319,16 @@ function setBrand(){const b=$('#bl');if(b)b.innerHTML=S.cfg.logo?`<span class="c
 function readForm(){const v=i=>{const e=$('#f-'+i);return e?e.value.trim():undefined};
  const o={tok:v('tok'),gid:v('gid'),name:v('name'),ev:v('ev'),tag:v('tag'),ig:v('ig'),gr:v('gr')},op=v('open');if(op!==undefined)o.open=op=='1';
  for(const k in o)if(o[k]!==undefined)S.cfg[k]=o[k];G.tok=S.cfg.tok||'';G.id=S.cfg.gid||''}
-const pushCfg=()=>{const c=S.cfg;return gh('PATCH','/gists/'+G.id,{files:{'config.json':{content:JSON.stringify({name:c.name,ev:c.ev,tag:c.tag,ig:url(c.ig),gr:c.gr,open:c.open,theme:c.theme,pc:c.pc,logo:c.logo,bg:c.bg,bgo:c.bgo})}}})};
+const pushCfg=()=>{const c=S.cfg;return gh('PATCH','/gists/'+G.id,{files:{'config.json':{content:JSON.stringify({name:c.name,ev:c.ev,tag:c.tag,ig:url(c.ig),gr:c.gr,open:c.open,theme:c.theme,pc:c.pc,logo:c.logo,ls:c.ls,bg:c.bg,bgo:c.bgo})}}})};
 async function saveCfg(){readForm();G.et='';await kv.set('cfg',S.cfg);if(!G.id||!G.tok)return toast('Informe token e Gist');
  try{await pushCfg();toast('Salvo e sincronizado');setBrand();sync()}catch(e){toast('Falha ao sincronizar ('+e.message+')')}}
 function changed(){kv.set('cfg',S.cfg);applyTheme(S.cfg);setBrand();if(S.sec=='cfg')viewCfg();
  if(G.id&&G.tok)pushCfg().then(()=>toast('Aparência publicada')).catch(()=>toast('Salva neste aparelho; falha ao publicar'))}
 async function onChg(e){const i=e.target;try{
  if(i.id=='f-bgo'){readForm();S.cfg.bgo=+i.value;return changed()}
+ if(i.id=='f-ls'){readForm();S.cfg.ls=+i.value;return changed()}
  if(i.id=='f-pc'){readForm();S.cfg.pc=i.value;return changed()}
- if(i.id=='f-logo'&&i.files[0]){readForm();S.cfg.logo=await readImg(i.files[0],300,'image/png');return changed()}
+ if(i.id=='f-logo'&&i.files[0]){readForm();S.cfg.logo=await readImg(i.files[0],500,'image/png');return changed()}
  if(i.id=='f-bg'&&i.files[0]){readForm();S.cfg.bg=await readImg(i.files[0],1100,'image/jpeg',.6);return changed()}}catch{toast('Não foi possível ler a imagem')}}
 
 let busy=0;
